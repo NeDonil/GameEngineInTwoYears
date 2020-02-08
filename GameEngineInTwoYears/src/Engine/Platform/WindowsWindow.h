@@ -21,6 +21,8 @@ namespace Engine
 		void SetVSync(bool enabled);
 		bool IsVSync() const;
 
+		GLFWwindow* getWindowPointer();
+
 	private:
 		virtual void Init(const WindowProps& props);
 		virtual void Shutdown();
