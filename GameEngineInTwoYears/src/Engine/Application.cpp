@@ -4,6 +4,8 @@
 #include "Event/ApplicationEvent.h"
 #include "Log.h"
 
+#include <GLAD/glad.h>
+
 namespace Engine
 {
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
@@ -48,6 +50,9 @@ namespace Engine
 	{
 		while (m_Running)
 		{
+			GLuint VAO;
+			glGenVertexArrays(1, &VAO);
+
 			glClearColor(0.2f, 0.4f, 0.7f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT);
 

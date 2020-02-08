@@ -1,8 +1,7 @@
 #pragma once
 #include <enpch.h>
-#include <GLFW/glfw3.h>
 #include "../Window.h"
-#include "../Log.h"
+struct GLFWwindow;
 
 namespace Engine
 {
