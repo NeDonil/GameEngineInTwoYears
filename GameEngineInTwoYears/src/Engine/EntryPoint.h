@@ -10,6 +10,7 @@ extern Engine::Application* Engine::CreateApplication();
 int main(int argc, char** argv)
 {
 	Engine::Log::Init();
+	ENGINE_CORE_INFO("Logger initialize success");
 
 	auto app = Engine::CreateApplication();
 	app->Run();
