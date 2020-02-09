@@ -11,12 +11,12 @@ public:
 
 	void OnUpdate() override
 	{
-		//ENGINE_CLIENT_INFO("ExampleLayer::Update");
+		
 	}
 
 	void OnEvent(Engine::Event& event) override
 	{
-		//glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+
 	}
 };
 
