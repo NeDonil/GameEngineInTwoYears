@@ -57,7 +57,7 @@ namespace Engine
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
 			{
 				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-				WindowResizeEvent event(width, height);
+				WindowResizedEvent event(width, height);
 				data.Width = width;
 				data.Height = height;
 
@@ -79,7 +79,7 @@ namespace Engine
 				{
 				case GLFW_PRESS:
 				{
-					KeyPressEvent event(key, 0);
+					KeyPressedEvent event(key, 0);
 					data.EventCallback(event);
 					break;
 				}
@@ -93,7 +93,7 @@ namespace Engine
 
 				case GLFW_REPEAT:
 				{
-					KeyPressEvent event(key, 1);
+					KeyPressedEvent event(key, 1);
 					data.EventCallback(event);
 					break;
 				}
@@ -138,6 +138,13 @@ namespace Engine
 				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
 				MouseMovedEvent event((float)xpos, (float)ypos);
+				data.EventCallback(event);
+			});
+
+		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode)
+			{
+				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+				KeyTypedEvent event(keycode);
 				data.EventCallback(event);
 			});
 	}

@@ -11,7 +11,7 @@ public:
 
 	void OnUpdate() override
 	{
-		ENGINE_CLIENT_INFO("ExampleLayer::Update");
+		//ENGINE_CLIENT_INFO("ExampleLayer::Update");
 	}
 
 	void OnEvent(Engine::Event& event) override
