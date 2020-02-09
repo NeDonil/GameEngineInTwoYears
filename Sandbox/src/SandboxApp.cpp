@@ -16,7 +16,7 @@ public:
 
 	void OnEvent(Engine::Event& event) override
 	{
-		ENGINE_CLIENT_TRACE("{0}", 5);
+		//glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 };
 
@@ -26,6 +26,7 @@ public:
 	Sandbox()
 	{
 		PushLayer(new ExampleLayer());
+		PushOverlay(new Engine::ImGuiLayer());
 	}
 
 	~Sandbox()

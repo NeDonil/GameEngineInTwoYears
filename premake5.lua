@@ -13,9 +13,11 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 IncludeDir = {}
 IncludeDir["GLFW"] = "GameEngineInTwoYears/vendor/GLFW/include"
 IncludeDir["Glad"] = "GameEngineInTwoYears/vendor/GLAD/include"
+IncludeDir["ImGui"] = "GameEngineInTwoYears/vendor/ImGui/"
 
 include "GameEngineInTwoYears/vendor/GLFW"
 include "GameEngineInTwoYears/vendor/Glad"
+include "GameEngineInTwoYears/vendor/ImGui"
 
 project "GameEngineInTwoYears"
 	location "GameEngineInTwoYears"
@@ -39,7 +41,8 @@ project "GameEngineInTwoYears"
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
 		"%{IncludeDir.GLFW}",
-		"%{IncludeDir.Glad}"
+		"%{IncludeDir.Glad}",
+		"%{IncludeDir.ImGui}"
 
 	}
 
@@ -47,6 +50,7 @@ project "GameEngineInTwoYears"
 	{
 		"GLFW",
 		"Glad",
+		"ImGui",
 		"opengl32.lib"
 	}
 
@@ -99,12 +103,12 @@ project "Sandbox"
 	includedirs
 	{
 		"GameEngineInTwoYears/vendor/spdlog/include",
-		"GameEngineInTwoYears/src"
+		"GameEngineInTwoYears/src",
 	}
 
 	links
 	{
-		"GameEngineInTwoYears"
+		"GameEngineInTwoYears",
 	}
 
 	filter "system:windows"

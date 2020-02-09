@@ -4,3 +4,6 @@
 [submodule "gameengineintwoyears/vendor/GLFW"]
 	path = gameengineintwoyears/vendor/GLFW
 	url = https://github.com/thecherno/glfw
+[submodule "gameengineintwoyears/vendor/ImGUI"]
+	path = gameengineintwoyears/vendor/ImGUI
+	url = https://github.com/TheCherno/Imgui
