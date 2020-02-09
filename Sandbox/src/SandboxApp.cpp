@@ -11,7 +11,8 @@ public:
 
 	void OnUpdate() override
 	{
-		
+		if (Engine::Input::IsKeyPressed(ENGINE_KEY_TAB))
+			ENGINE_CLIENT_WARN("TAB key is pressed");
 	}
 
 	void OnEvent(Engine::Event& event) override
