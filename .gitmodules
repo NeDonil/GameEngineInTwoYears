@@ -7,3 +7,6 @@
 [submodule "gameengineintwoyears/vendor/ImGUI"]
 	path = gameengineintwoyears/vendor/ImGUI
 	url = https://github.com/TheCherno/Imgui
+[submodule "gameengineintwoyears/vendor/glm"]
+	path = gameengineintwoyears/vendor/glm
+	url = https://github.com/g-truc/glm

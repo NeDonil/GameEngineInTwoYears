@@ -33,13 +33,16 @@ project "GameEngineInTwoYears"
 	files
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/glm/glm/**.hpp",
+		"%{prj.name}/vendor/glm/glm/**.inl"
 	}
 
 	includedirs
 	{
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
+		"%{prj.name}/vendor/glm/",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}"
