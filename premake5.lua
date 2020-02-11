@@ -100,18 +100,23 @@ project "Sandbox"
 	files
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/glm/glm/**.hpp",
+		"%{prj.name}/vendor/glm/glm/**.inl"
 	}
 
 	includedirs
 	{
 		"GameEngineInTwoYears/vendor/spdlog/include",
-		"GameEngineInTwoYears/src",
+		"GameEngineInTwoYears/vendor/glm",
+		"%{IncludeDir.ImGui}",
+		"GameEngineInTwoYears/src"
 	}
 
 	links
 	{
 		"GameEngineInTwoYears",
+		"ImGui"
 	}
 
 	filter "system:windows"
