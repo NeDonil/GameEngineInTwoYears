@@ -1,12 +1,11 @@
 workspace "GameEngineInTwoYears"
-	architecture "x64"
+architecture "x64"
 
-	configurations
-	{
-		"Debug",
-		"Release",
-		"Dist"
-	}
+configurations
+{
+	"Debug",
+	"Release"
+}
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
@@ -20,12 +19,16 @@ include "GameEngineInTwoYears/vendor/Glad"
 include "GameEngineInTwoYears/vendor/ImGui"
 
 project "GameEngineInTwoYears"
-	location "GameEngineInTwoYears"
-	kind "SharedLib"
-	language "C++"
+location "GameEngineInTwoYears"
 
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+kind "StaticLib"
+staticruntime "on"
+
+language "C++"
+cppdialect "C++17"
+
+targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
 	pchheader "enpch.h"
 	pchsource "GameEngineInTwoYears/src/enpch.cpp"
@@ -58,8 +61,6 @@ project "GameEngineInTwoYears"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
-		staticruntime "On"
 		systemversion "latest"
 
 		defines
@@ -69,30 +70,20 @@ project "GameEngineInTwoYears"
 			"GLFW_INCLUDE_NONE"
 		}
 
-		postbuildcommands
-		{
-			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")
-		}
-
 	filter "configurations:Debug"
 		defines "ENGINE_DEBUG"
-		buildoptions "/MDd"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "ENGINE_RELEASE"
-		buildoptions "/MD"
-		optimize "On"
-
-	filter "configurations:Dist"
-		defines "ENGINE_DIST"
-		buildoptions "/MD"
 		optimize "On"
 
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -120,8 +111,6 @@ project "Sandbox"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
-		staticruntime "On"
 		systemversion "latest"
 
 		defines
@@ -131,13 +120,9 @@ project "Sandbox"
 
 	filter "configurations:Debug"
 		defines "ENGINE_DEBUG"
-		symbols "On"
+		symbols "on"
 
 	filter "configurations:Release"
 		defines "ENGINE_RELEASE"
-		optimize "On"
-
-	filter "configurations:Dist"
-		defines "ENGINE_DIST"
-		optimize "On" 
+		optimize "on"
 
