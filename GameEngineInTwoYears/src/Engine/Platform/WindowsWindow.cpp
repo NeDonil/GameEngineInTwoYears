@@ -1,11 +1,11 @@
 #include <enpch.h>
+
 #include "WindowsWindow.h"
+
 #include "Engine/Event/ApplicationEvent.h"
 #include "Engine/Event/MouseEvent.h"
 #include "Engine/Event/KeyEvent.h"
-
-#include "GLAD/glad.h"
-#include "GLFW/glfw3.h"
+#include "Engine/Platform/OpenGL/OpenGLContext.h"
 
 namespace Engine
 {
@@ -37,6 +37,7 @@ namespace Engine
 		m_Data.Width = props.Width;
 		m_Data.Height = props.Height;
 
+
 		ENGINE_CORE_INFO("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
 
 		if (!s_GLFWInitialized)
@@ -48,9 +49,9 @@ namespace Engine
 		}
 
 		m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
-		glfwMakeContextCurrent(m_Window);
-		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		ENGINE_CORE_ASSERT(status, "Glad initialize is not ok");
+		m_Context = new OpenGLContext(m_Window);
+		m_Context->Init();
+
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
 
@@ -158,6 +159,7 @@ namespace Engine
 	void WindowsWindow::OnUpdate()
 	{
 		glfwPollEvents();
+		m_Context->SwapBuffers();
 		glfwSwapBuffers(m_Window);
 	}
 
