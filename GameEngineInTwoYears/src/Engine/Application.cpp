@@ -45,6 +45,27 @@ namespace Engine
 		unsigned int elements[] = { 0, 1, 2 };
 
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements, GL_STATIC_DRAW);
+
+		std::string vertex = R"(
+			#version 330 core
+			layout (location = 0) in vec3 pos;
+			
+			void main()
+			{
+				gl_Position = vec4(pos, 1.0f);
+			}		
+		)";
+
+		std::string fragment = R"(
+			#version 330 core
+			
+			void main()
+			{
+				gl_FragColor = vec4(1.0f, 0.0f, 0.0f, 1.0f);
+			}		
+		)";
+
+		m_Shader.reset(new Shader(vertex, fragment));
 	}
 
 	Application::~Application()
@@ -86,6 +107,7 @@ namespace Engine
 			glClearColor(0.2f, 0.4f, 0.7f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT);
 
+			m_Shader->Bind();
 			glBindVertexArray(m_VertexArray);
 			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 			glBindVertexArray(0);
