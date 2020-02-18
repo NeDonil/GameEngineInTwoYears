@@ -1,4 +1,5 @@
 workspace "GameEngineInTwoYears"
+
 architecture "x64"
 
 configurations

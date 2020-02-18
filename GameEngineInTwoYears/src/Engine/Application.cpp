@@ -27,24 +27,22 @@ namespace Engine
 		glGenVertexArrays(1, &m_VertexArray);
 		glBindVertexArray(m_VertexArray);
 
-		glGenBuffers(1, &m_VertexBuffer);
-		glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+		float vertices[] = { -0.5f, -0.5f, 0.0f,
+					          0.5f, -0.5f, 0.0f,
+					          0.0f,  0.5f, 0.0f };
 
-		float vertices[] = {-0.5f, -0.5f, 0.0f,
-							 0.5f, -0.5f, 0.0f, 
-							 0.0f,  0.5f, 0.0f };
+		m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+		m_VertexBuffer->Bind();
 
 		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
 
-		glGenBuffers(1, &m_ElementBuffer);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ElementBuffer);
+		unsigned int indices[] = { 0, 1, 2 };
 
-		unsigned int elements[] = { 0, 1, 2 };
-
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements, GL_STATIC_DRAW);
+		m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		m_IndexBuffer->Bind();
 
 		std::string vertex = R"(
 			#version 330 core
@@ -104,12 +102,12 @@ namespace Engine
 	{
 		while (m_Running)
 		{
-			glClearColor(0.2f, 0.4f, 0.7f, 1.0f);
+			glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			m_Shader->Bind();
 			glBindVertexArray(m_VertexArray);
-			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+			glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, 0);
 			glBindVertexArray(0);
 
 			for (Layer* layer : m_LayerStack)
@@ -121,6 +119,7 @@ namespace Engine
 			m_ImGuiLayer->End();
 
 			m_Window->OnUpdate();
+
 		}
 	}
 
