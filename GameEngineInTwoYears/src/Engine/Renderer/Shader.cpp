@@ -20,9 +20,6 @@ namespace Engine
 		const char* vertexSource   = vertexSrc.c_str();
 		const char* fragmentSource = fragmentSrc.c_str();
 
-		std::cout << "Vertex shader : " << vertexSrc << std::endl;
-		std::cout << "Fragment shader : " << fragmentSrc << std::endl;
-
 		int status;
 		char infolog[512];
 
