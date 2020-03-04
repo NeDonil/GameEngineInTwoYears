@@ -6,8 +6,11 @@
 #include "Input.h"
 #include "Renderer/Renderer.h"
 #include "Renderer/RenderCommand.h"
+#include "KeyCodes.h"
 
 #include <GLAD/glad.h>
+
+float degrees = 0;
 
 namespace Engine
 {
@@ -15,7 +18,8 @@ namespace Engine
 
 	Application* Application::s_Instance = nullptr;
 
-	Application::Application()
+	Application::Application():
+		m_Camera(-2, 2, -2, 2)
 	{
 		ENGINE_CORE_ASSERT(s_Instance, "Applicaiton is already exists");
 		s_Instance = this;
@@ -69,6 +73,8 @@ namespace Engine
 			layout (location = 0) in vec3 a_Position;
 			layout (location = 1) in vec4 a_Color;
 			
+			uniform mat4 u_ViewProjection;
+
 			out vec3 v_Position;
 			out vec4 v_Color; 
 			
@@ -76,7 +82,7 @@ namespace Engine
 			{
 				v_Position = a_Position;
 				v_Color = a_Color;
-				gl_Position = vec4(a_Position, 1.0f);
+				gl_Position = u_ViewProjection * vec4(a_Position, 1.0f);
 			}		
 		)";
 
@@ -96,12 +102,14 @@ namespace Engine
 			#version 330 core
 			layout (location = 0) in vec3 a_Position;
 			
+			uniform mat4 u_ViewProjection;
+
 			out vec3 v_Position;
 			
 			void main()
 			{
 				v_Position = a_Position;
-				gl_Position = vec4(a_Position, 1.0f);
+				gl_Position = u_ViewProjection * vec4(a_Position, 1.0f);
 			}		
 		)";
 
@@ -157,14 +165,11 @@ namespace Engine
 			RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
 			RenderCommand::Clear();
 
-			Renderer::BeginScene();
+			m_Camera.SetRotation(degrees += 5);
 
-				m_ShaderSquare->Bind();
-				Renderer::Submit(m_SquareVA);
-
-				m_Shader->Bind();
-				Renderer::Submit(m_VertexArray);
-
+			Renderer::BeginScene(m_Camera);
+				Renderer::Submit(m_ShaderSquare, m_SquareVA);
+				Renderer::Submit(m_Shader, m_VertexArray);
 			Renderer::EndScene();
 
 			for (Layer* layer : m_LayerStack)

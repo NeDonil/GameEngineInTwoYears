@@ -92,7 +92,7 @@ namespace Engine
 				offset += element.Size;
 				m_Stride += element.Size;
 			}
-		}
+		}	
 	private:
 		std::vector<BufferElement> m_Elements;
 		uint32_t m_Stride;
