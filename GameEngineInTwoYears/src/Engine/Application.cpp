@@ -4,6 +4,8 @@
 #include "Event/ApplicationEvent.h"
 #include "Log.h"
 #include "Input.h"
+#include "Renderer/Renderer.h"
+#include "Renderer/RenderCommand.h"
 
 #include <GLAD/glad.h>
 
@@ -152,18 +154,18 @@ namespace Engine
 	{
 		while (m_Running)
 		{
-			glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT);
+			RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
+			RenderCommand::Clear();
 
-			m_ShaderSquare->Bind();
-			m_SquareVA->Bind();
-			glDrawElements(GL_TRIANGLES, m_SquareVA->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, 0);
-			glBindVertexArray(0);
+			Renderer::BeginScene();
 
-			m_Shader->Bind();
-			m_VertexArray->Bind();
-			glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, 0);
-			glBindVertexArray(0);
+				m_ShaderSquare->Bind();
+				Renderer::Submit(m_SquareVA);
+
+				m_Shader->Bind();
+				Renderer::Submit(m_VertexArray);
+
+			Renderer::EndScene();
 
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();
