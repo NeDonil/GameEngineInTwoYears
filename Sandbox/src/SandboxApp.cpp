@@ -1,19 +1,129 @@
 #include "Engine.h"
-#include "../ImGui/imgui.h"
 
 class ExampleLayer : public Engine::Layer
 {
 public:
 	ExampleLayer() :
-		Layer("Example")
+		Layer("Example"), m_Camera(-1.0f, 1.0f, -1.0f, 1.0f), m_CameraPosition(glm::vec3(0.0f))
 	{
+		m_VertexArray.reset(Engine::VertexArray::Create());
 
+		float vertices[] = { -0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
+							  0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
+							  0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f };
+		std::shared_ptr<Engine::VertexBuffer> vertexBuffer;
+		vertexBuffer.reset(Engine::VertexBuffer::Create(vertices, sizeof(vertices)));
+
+		Engine::BufferLayout layout = {
+			{Engine::ShaderDataType::Float3, "a_Position"},
+			{Engine::ShaderDataType::Float4, "a_Color"},
+		};
+
+		vertexBuffer->SetLayout(layout);
+		m_VertexArray->AddVertexBuffer(vertexBuffer);
+
+		uint32_t indices[] = { 0, 1, 2 };
+		std::shared_ptr<Engine::IndexBuffer> indexBuffer;
+		indexBuffer.reset(Engine::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		m_VertexArray->SetIndexBuffer(indexBuffer);
+		//---------------------------------------------------------------------------------------------
+		m_SquareVA.reset(Engine::VertexArray::Create());
+
+		float SquareVertices[] = { -0.75f, -0.75f, 0.0f,
+									-0.75f,  0.75f, 0.0f,
+									 0.75f,  0.75f, 0.0f,
+									 0.75f, -0.75f, 0.0f };
+		std::shared_ptr<Engine::VertexBuffer> squareVB;
+		squareVB.reset(Engine::VertexBuffer::Create(SquareVertices, sizeof(SquareVertices)));
+		squareVB->SetLayout({
+			{Engine::ShaderDataType::Float3, "a_Position"}
+			});
+		m_SquareVA->AddVertexBuffer(squareVB);
+
+		uint32_t SquareIndices[] = { 0, 1, 2, 2, 0, 3 };
+		std::shared_ptr<Engine::IndexBuffer> squareIB;
+		squareIB.reset(Engine::IndexBuffer::Create(SquareIndices, sizeof(SquareIndices) / sizeof(uint32_t)));
+		m_SquareVA->SetIndexBuffer(squareIB);
+
+		std::string vertex = R"(
+			#version 330 core
+			layout (location = 0) in vec3 a_Position;
+			layout (location = 1) in vec4 a_Color;
+			
+			uniform mat4 u_ViewProjection;
+
+			out vec3 v_Position;
+			out vec4 v_Color; 
+			
+			void main()
+			{
+				v_Position = a_Position;
+				v_Color = a_Color;
+				gl_Position = u_ViewProjection * vec4(a_Position, 1.0f);
+			}		
+		)";
+
+		std::string fragment = R"(
+			#version 330 core
+			
+			in vec3 v_Position;
+			in vec4 v_Color;
+
+			void main()
+			{
+				gl_FragColor = v_Color;
+			}		
+		)";
+
+		std::string vertexSquare = R"(
+			#version 330 core
+			layout (location = 0) in vec3 a_Position;
+			
+			uniform mat4 u_ViewProjection;
+
+			out vec3 v_Position;
+			
+			void main()
+			{
+				v_Position = a_Position;
+				gl_Position = u_ViewProjection * vec4(a_Position, 1.0f);
+			}		
+		)";
+
+		std::string fragmentSquare = R"(
+			#version 330 core
+
+			void main()
+			{
+				gl_FragColor = vec4(0.2f, 0.8f, 0.8f, 1.0f);
+			}		
+		)";
+
+		m_Shader.reset(new Engine::Shader(vertex, fragment));
+		m_ShaderSquare.reset(new Engine::Shader(vertexSquare, fragmentSquare));
 	}
 
 	void OnUpdate() override
 	{
-		if (Engine::Input::IsKeyPressed(ENGINE_KEY_TAB))
-			ENGINE_CLIENT_WARN("TAB key is pressed");
+
+		if (Engine::Input::IsKeyPressed(ENGINE_KEY_W))
+			m_CameraPosition.y += m_CameraSpeed;
+		if (Engine::Input::IsKeyPressed(ENGINE_KEY_A))
+			m_CameraPosition.x -= m_CameraSpeed;
+		if (Engine::Input::IsKeyPressed(ENGINE_KEY_S))
+			m_CameraPosition.y -= m_CameraSpeed;
+		if (Engine::Input::IsKeyPressed(ENGINE_KEY_D))
+			m_CameraPosition.x += m_CameraSpeed;
+
+		Engine::RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
+		Engine::RenderCommand::Clear();
+
+		m_Camera.SetPosition(m_CameraPosition);
+
+		Engine::Renderer::BeginScene(m_Camera);
+			Engine::Renderer::Submit(m_ShaderSquare, m_SquareVA);
+			Engine::Renderer::Submit(m_Shader, m_VertexArray);
+		Engine::Renderer::EndScene();
 	}
 
 	virtual void OnImGuiRender() override
@@ -23,8 +133,19 @@ public:
 
 	void OnEvent(Engine::Event& event) override
 	{
-
+		
 	}
+
+private:
+	std::shared_ptr<Engine::Shader> m_Shader;
+	std::shared_ptr<Engine::VertexArray> m_VertexArray;
+
+	std::shared_ptr<Engine::Shader> m_ShaderSquare;
+	std::shared_ptr<Engine::VertexArray> m_SquareVA;
+
+	Engine::OrthographicCamera m_Camera;
+	glm::vec3 m_CameraPosition;
+	float m_CameraSpeed = 0.01f;
 };
 
 class Sandbox : public Engine::Application
