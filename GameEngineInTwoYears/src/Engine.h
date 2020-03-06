@@ -8,6 +8,7 @@
 #include "Engine/Input.h"
 #include "Engine/KeyCodes.h"
 #include "Engine/MouseButtonKeyCodes.h"
+#pragma once 
 
 #include "Engine/ImGui/ImGuiLayer.h"
 //---------Renderer--------------------------------
@@ -17,6 +18,9 @@
 #include "Engine/Renderer/Buffer.h"
 #include "Engine/Renderer/Shader.h"
 #include "Engine/Renderer/VertexArray.h"
+
+#include "Engine/Core/Timestep.h"
+#include "Engine/Log.h"
 
 #include "Engine/Renderer/OrthographicCamera.h"
 

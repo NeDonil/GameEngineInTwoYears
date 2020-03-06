@@ -7,6 +7,7 @@
 #include "Renderer/Renderer.h"
 #include "Renderer/RenderCommand.h"
 #include "KeyCodes.h"
+#include "Core/Timestep.h"
 
 #include <GLAD/glad.h>
 
@@ -50,8 +51,6 @@ namespace Engine
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
 
-		ENGINE_CORE_TRACE("{0}", e);
-
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
 		{
 			(*--it)->OnEvent(e);
@@ -64,8 +63,12 @@ namespace Engine
 	{
 		while (m_Running)
 		{
+			float time = (float)glfwGetTime();
+			Timestep timestep = time - m_LastFrameTime;
+			m_LastFrameTime = time;
+
 			for (Layer* layer : m_LayerStack)
-				layer->OnUpdate();
+				layer->OnUpdate(timestep);
 
 			m_ImGuiLayer->Begin();
 			for (Layer* layer : m_LayerStack)

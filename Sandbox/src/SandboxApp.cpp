@@ -103,17 +103,17 @@ public:
 		m_ShaderSquare.reset(new Engine::Shader(vertexSquare, fragmentSquare));
 	}
 
-	void OnUpdate() override
+	void OnUpdate(Engine::Timestep ts) override
 	{
-
+		ENGINE_CLIENT_TRACE("Time to render frame {0} miliseconds", ts.GetMilisecond());
 		if (Engine::Input::IsKeyPressed(ENGINE_KEY_W))
-			m_CameraPosition.y += m_CameraSpeed;
+			m_CameraPosition.y += m_CameraSpeed * (float) ts;
+		else if (Engine::Input::IsKeyPressed(ENGINE_KEY_S))
+			m_CameraPosition.y -= m_CameraSpeed * (float)ts;
 		if (Engine::Input::IsKeyPressed(ENGINE_KEY_A))
-			m_CameraPosition.x -= m_CameraSpeed;
-		if (Engine::Input::IsKeyPressed(ENGINE_KEY_S))
-			m_CameraPosition.y -= m_CameraSpeed;
-		if (Engine::Input::IsKeyPressed(ENGINE_KEY_D))
-			m_CameraPosition.x += m_CameraSpeed;
+			m_CameraPosition.x -= m_CameraSpeed * (float)ts;
+		else if (Engine::Input::IsKeyPressed(ENGINE_KEY_D))
+			m_CameraPosition.x += m_CameraSpeed * (float)ts;
 
 		Engine::RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
 		Engine::RenderCommand::Clear();
@@ -145,7 +145,7 @@ private:
 
 	Engine::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition;
-	float m_CameraSpeed = 0.01f;
+	float m_CameraSpeed = 1.0f;
 };
 
 class Sandbox : public Engine::Application
