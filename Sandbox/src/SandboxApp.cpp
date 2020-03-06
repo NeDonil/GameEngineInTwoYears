@@ -4,13 +4,14 @@ class ExampleLayer : public Engine::Layer
 {
 public:
 	ExampleLayer() :
-		Layer("Example"), m_Camera(-1.0f, 1.0f, -1.0f, 1.0f), m_CameraPosition(glm::vec3(0.0f))
+		Layer("Example"), m_Camera(-1.6, 1.6f, -0.9, 0.9), m_CameraPosition(glm::vec3(0.0f)), m_SquarePosition(glm::vec3(1.0f))
 	{
 		m_VertexArray.reset(Engine::VertexArray::Create());
 
 		float vertices[] = { -0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
 							  0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
-							  0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f };
+							  0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f }; 
+
 		std::shared_ptr<Engine::VertexBuffer> vertexBuffer;
 		vertexBuffer.reset(Engine::VertexBuffer::Create(vertices, sizeof(vertices)));
 
@@ -29,10 +30,10 @@ public:
 		//---------------------------------------------------------------------------------------------
 		m_SquareVA.reset(Engine::VertexArray::Create());
 
-		float SquareVertices[] = { -0.75f, -0.75f, 0.0f,
-									-0.75f,  0.75f, 0.0f,
-									 0.75f,  0.75f, 0.0f,
-									 0.75f, -0.75f, 0.0f };
+		float SquareVertices[] = { - 0.5f, -0.5f, 0.0f,
+									-0.5f,  0.5f, 0.0f,
+									 0.5f,  0.5f, 0.0f,
+									 0.5f, -0.5f, 0.0f };
 		std::shared_ptr<Engine::VertexBuffer> squareVB;
 		squareVB.reset(Engine::VertexBuffer::Create(SquareVertices, sizeof(SquareVertices)));
 		squareVB->SetLayout({
@@ -51,6 +52,7 @@ public:
 			layout (location = 1) in vec4 a_Color;
 			
 			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
 
 			out vec3 v_Position;
 			out vec4 v_Color; 
@@ -59,7 +61,7 @@ public:
 			{
 				v_Position = a_Position;
 				v_Color = a_Color;
-				gl_Position = u_ViewProjection * vec4(a_Position, 1.0f);
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0f);
 			}		
 		)";
 
@@ -80,13 +82,14 @@ public:
 			layout (location = 0) in vec3 a_Position;
 			
 			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
 
 			out vec3 v_Position;
 			
 			void main()
 			{
 				v_Position = a_Position;
-				gl_Position = u_ViewProjection * vec4(a_Position, 1.0f);
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0f);
 			}		
 		)";
 
@@ -115,14 +118,34 @@ public:
 		else if (Engine::Input::IsKeyPressed(ENGINE_KEY_D))
 			m_CameraPosition.x += m_CameraSpeed * (float)ts;
 
+		if (Engine::Input::IsKeyPressed(ENGINE_KEY_I))
+			m_SquarePosition.y += m_SquareSpeed * (float)ts;
+		else if (Engine::Input::IsKeyPressed(ENGINE_KEY_K))
+			m_SquarePosition.y -= m_SquareSpeed * (float)ts;
+		if (Engine::Input::IsKeyPressed(ENGINE_KEY_J))
+			m_SquarePosition.x -= m_SquareSpeed * (float)ts;
+		else if (Engine::Input::IsKeyPressed(ENGINE_KEY_L))
+			m_SquarePosition.x += m_SquareSpeed * (float)ts;
+
 		Engine::RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
 		Engine::RenderCommand::Clear();
 
 		m_Camera.SetPosition(m_CameraPosition);
 
 		Engine::Renderer::BeginScene(m_Camera);
-			Engine::Renderer::Submit(m_ShaderSquare, m_SquareVA);
-			Engine::Renderer::Submit(m_Shader, m_VertexArray);
+
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1));
+		for (int i = 0; i < 10; i++)
+		{
+			for (int j = 0; j < 10; j++)
+			{
+				glm::vec3 pos(0.11 * i, 0.11 * j, 0.0f);
+				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos);
+				Engine::Renderer::Submit(m_ShaderSquare, m_SquareVA, transform * scale);
+			}
+		}
+		Engine::Renderer::Submit(m_Shader, m_VertexArray);
+
 		Engine::Renderer::EndScene();
 	}
 
@@ -145,7 +168,9 @@ private:
 
 	Engine::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition;
-	float m_CameraSpeed = 1.0f;
+	float m_CameraSpeed = 5.0f;
+	float m_SquareSpeed = 1.0f;
+	glm::vec3 m_SquarePosition;
 };
 
 class Sandbox : public Engine::Application
