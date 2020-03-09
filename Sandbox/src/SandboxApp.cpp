@@ -15,7 +15,7 @@ public:
 							  0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
 							  0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f }; 
 
-		std::shared_ptr<Engine::VertexBuffer> vertexBuffer;
+		Engine::Ref<Engine::VertexBuffer> vertexBuffer;
 		vertexBuffer.reset(Engine::VertexBuffer::Create(vertices, sizeof(vertices)));
 
 		Engine::BufferLayout layout = {
@@ -27,7 +27,7 @@ public:
 		m_VertexArray->AddVertexBuffer(vertexBuffer);
 
 		uint32_t indices[] = { 0, 1, 2 };
-		std::shared_ptr<Engine::IndexBuffer> indexBuffer;
+		Engine::Ref<Engine::IndexBuffer> indexBuffer;
 		indexBuffer.reset(Engine::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 		//---------------------------------------------------------------------------------------------
@@ -37,7 +37,7 @@ public:
 									-0.5f,  0.5f, 0.0f,
 									 0.5f,  0.5f, 0.0f,
 									 0.5f, -0.5f, 0.0f };
-		std::shared_ptr<Engine::VertexBuffer> squareVB;
+		Engine::Ref<Engine::VertexBuffer> squareVB;
 		squareVB.reset(Engine::VertexBuffer::Create(SquareVertices, sizeof(SquareVertices)));
 		squareVB->SetLayout({
 			{Engine::ShaderDataType::Float3, "a_Position"}
@@ -45,7 +45,7 @@ public:
 		m_SquareVA->AddVertexBuffer(squareVB);
 
 		uint32_t SquareIndices[] = { 0, 1, 2, 2, 0, 3 };
-		std::shared_ptr<Engine::IndexBuffer> squareIB;
+		Engine::Ref<Engine::IndexBuffer> squareIB;
 		squareIB.reset(Engine::IndexBuffer::Create(SquareIndices, sizeof(SquareIndices) / sizeof(uint32_t)));
 		m_SquareVA->SetIndexBuffer(squareIB);
 
@@ -110,7 +110,6 @@ public:
 
 	void OnUpdate(Engine::Timestep ts) override
 	{
-		ENGINE_CLIENT_TRACE("Time to render frame {0} miliseconds", ts.GetMilisecond());
 		if (Engine::Input::IsKeyPressed(ENGINE_KEY_W))
 			m_CameraPosition.y += m_CameraSpeed * (float) ts;
 		else if (Engine::Input::IsKeyPressed(ENGINE_KEY_S))
@@ -119,15 +118,6 @@ public:
 			m_CameraPosition.x -= m_CameraSpeed * (float)ts;
 		else if (Engine::Input::IsKeyPressed(ENGINE_KEY_D))
 			m_CameraPosition.x += m_CameraSpeed * (float)ts;
-
-		if (Engine::Input::IsKeyPressed(ENGINE_KEY_I))
-			m_SquarePosition.y += m_SquareSpeed * (float)ts;
-		else if (Engine::Input::IsKeyPressed(ENGINE_KEY_K))
-			m_SquarePosition.y -= m_SquareSpeed * (float)ts;
-		if (Engine::Input::IsKeyPressed(ENGINE_KEY_J))
-			m_SquarePosition.x -= m_SquareSpeed * (float)ts;
-		else if (Engine::Input::IsKeyPressed(ENGINE_KEY_L))
-			m_SquarePosition.x += m_SquareSpeed * (float)ts;
 
 		Engine::RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
 		Engine::RenderCommand::Clear();
@@ -146,7 +136,7 @@ public:
 			for (int j = 0; j < 10; j++)
 			{
 				glm::vec3 pos(0.11 * i, 0.11 * j, 0.0f);
-				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos);
+				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos + m_SquarePosition);
 				Engine::Renderer::Submit(m_FlatColorShader, m_SquareVA, transform * scale);
 			}
 		}
@@ -159,6 +149,7 @@ public:
 	{
 		ImGui::Begin("Settings");
 		ImGui::ColorEdit3("Square color", glm::value_ptr(m_SquareColor));
+		ImGui::SliderFloat3("Position", glm::value_ptr(m_SquarePosition), -2.0f, 2.0f);
 		ImGui::End();
 	}
 
@@ -168,11 +159,11 @@ public:
 	}
 
 private:
-	std::shared_ptr<Engine::Shader> m_Shader;
-	std::shared_ptr<Engine::VertexArray> m_VertexArray;
+	Engine::Ref<Engine::Shader> m_Shader;
+	Engine::Ref<Engine::VertexArray> m_VertexArray;
 
-	std::shared_ptr<Engine::Shader> m_FlatColorShader;
-	std::shared_ptr<Engine::VertexArray> m_SquareVA;
+	Engine::Ref<Engine::Shader> m_FlatColorShader;
+	Engine::Ref<Engine::VertexArray> m_SquareVA;
 
 	Engine::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition;
