@@ -1,47 +1,36 @@
 #include <enpch.h>
 #include "OpenGLShader.h"
+#include <fstream>
 #include <GLAD/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Engine
 {
+
+	static GLenum ShaderTypeFromString(const std::string& type)
+	{
+		if (type == "vertex")
+			return GL_VERTEX_SHADER;
+		if (type == "fragment" || type == "pixel")
+			return GL_FRAGMENT_SHADER;
+
+		ENGINE_CORE_ASSERT(false, "Unknown shader type!");
+		return 0;
+	}
+
+	OpenGLShader::OpenGLShader(const std::string& filepath)
+	{
+		std::string source = ReadFile(filepath);
+		auto shaderSources = PreProcess(source);
+		Compile(shaderSources);
+	}
+
 	OpenGLShader::OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc)
 	{
-		m_RendererID = glCreateProgram();
-		GLuint vertexShader, fragmentShader;
-
-		const char* vertexSource = vertexSrc.c_str();
-		const char* fragmentSource = fragmentSrc.c_str();
-
-		int status;
-		char infolog[512];
-
-		vertexShader = glCreateShader(GL_VERTEX_SHADER);
-		glShaderSource(vertexShader, 1, &vertexSource, NULL);
-		glCompileShader(vertexShader);
-		glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &status);
-		if (!status)
-		{
-			glGetShaderInfoLog(vertexShader, 512, NULL, infolog);
-			ENGINE_CORE_CRITICAL("Vertex Shader Error : \n {0}", infolog);
-		}
-
-		fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-		glShaderSource(fragmentShader, 1, &fragmentSource, NULL);
-		glCompileShader(fragmentShader);
-		glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &status);
-		if (!status)
-		{
-			glGetShaderInfoLog(fragmentShader, 512, NULL, infolog);
-			ENGINE_CORE_CRITICAL("Fragment Shader Error : \n {0}", infolog);
-		}
-
-		glAttachShader(m_RendererID, vertexShader);
-		glAttachShader(m_RendererID, fragmentShader);
-		glLinkProgram(m_RendererID);
-
-		glDeleteShader(vertexShader);
-		glDeleteShader(fragmentShader);
+		std::unordered_map<GLenum, std::string> shaderSources;
+		shaderSources[GL_VERTEX_SHADER] = vertexSrc;
+		shaderSources[GL_FRAGMENT_SHADER] = fragmentSrc;
+		Compile(shaderSources);
 	}
 
 	OpenGLShader::~OpenGLShader()
@@ -99,5 +88,77 @@ namespace Engine
 	{
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+	}
+
+	std::string OpenGLShader::ReadFile(const std::string& filepath)
+	{
+		std::string result;
+		std::ifstream in(filepath, std::ios::in, std::ios::binary);
+		if (in)
+		{
+			in.seekg(0, std::ios::end);
+			result.resize(in.tellg());
+			in.seekg(0, std::ios::beg);
+			in.read(&result[0], result.size());
+			in.close();
+		}
+		else
+		{
+			ENGINE_CORE_ERROR("Could not open file {0}", filepath);
+		}
+		return result;
+	}
+
+	std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& source)
+	{
+		std::unordered_map<GLenum, std::string> shaderSources;
+
+		const char* typeToken = "#type";
+		size_t typeTokenLength = strlen(typeToken);
+		size_t pos = source.find(typeToken, 0);
+		while (pos != std::string::npos)
+		{
+			size_t eol = source.find_first_of("\r\n", pos);
+			ENGINE_CORE_ASSERT(eol != std::string::npos, "Syntax error");
+			size_t begin = pos + typeTokenLength + 1;
+			std::string type = source.substr(begin, eol - begin);
+			ENGINE_CORE_ASSERT(ShaderTypeFromString(type), "Invalid shader type specified");
+
+			size_t nextLinePos = source.find_first_not_of("\r\n", eol);
+			pos = source.find(typeToken, nextLinePos);
+			shaderSources[ShaderTypeFromString(type)] = source.substr(nextLinePos, pos - (nextLinePos == std::string::npos ? source.size() - 1 : nextLinePos));
+		}
+
+		return shaderSources;
+	}
+
+	void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shaderSources)
+	{
+		m_RendererID = glCreateProgram();
+		int status;
+		char infolog[512];
+
+		for (auto& kv : shaderSources)
+		{
+			GLenum type = kv.first;
+			const std::string& source = kv.second;
+			const char* sourceCStr = source.c_str();
+
+			GLuint shader = glCreateShader(type);
+			glShaderSource(shader, 1, &sourceCStr, NULL);
+			glCompileShader(shader);
+
+			glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
+			if (!status)
+			{
+				glGetShaderInfoLog(shader, 512, NULL, infolog);
+				ENGINE_CORE_CRITICAL("Shader Error : \n {0}", infolog);
+			}
+			glAttachShader(m_RendererID, shader);
+
+			glDeleteShader(shader);
+		}
+
+		glLinkProgram(m_RendererID);
 	}
 }

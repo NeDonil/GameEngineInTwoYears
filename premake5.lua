@@ -105,6 +105,7 @@ project "Sandbox"
 	{
 		"GameEngineInTwoYears/vendor/spdlog/include",
 		"GameEngineInTwoYears/vendor/glm",
+		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
 		"GameEngineInTwoYears/src"
 	}
@@ -112,6 +113,7 @@ project "Sandbox"
 	links
 	{
 		"GameEngineInTwoYears",
+		"Glad",
 		"ImGui"
 	}
 

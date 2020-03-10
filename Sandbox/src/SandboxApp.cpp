@@ -1,6 +1,7 @@
 #include "Engine.h"
 #include "Engine/Platform/OpenGL/OpenGLShader.h"
 #include "glm/gtc/type_ptr.hpp"
+#include "GLAD/glad.h"
 #include "imgui.h"
 
 class ExampleLayer : public Engine::Layer
@@ -109,37 +110,7 @@ public:
 
 		m_FlatColorShader.reset(Engine::Shader::Create(vertexSquare, fragmentSquare));
 
-		std::string textureShaderVertexSrc = R"(
-			#version 330 core
-			layout (location = 0) in vec3 a_Position;
-			layout (location = 1) in vec2 a_TexCoord;
-			
-			out vec2 v_TexCoord;
-		
-			uniform mat4 u_ViewProjection;
-			uniform mat4 u_Transform;
-			
-			void main()
-			{
-				v_TexCoord = a_TexCoord;
-				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0f);
-			}		
-		)";
-
-		std::string textureShaderFragmentSrc = R"(
-			#version 330 core
-
-			in vec2 v_TexCoord;
-
-			uniform sampler2D u_Texture;
-
-			void main()
-			{
-				gl_FragColor = texture(u_Texture, v_TexCoord);
-			}		
-		)";
-
-		m_TextureShader.reset(Engine::Shader::Create(textureShaderVertexSrc, textureShaderFragmentSrc));
+		m_TextureShader.reset(Engine::Shader::Create("assets/shaders/Texture.glsl"));
 		m_Texture = Engine::Texture2D::Create("assets/textures/Checkerboard.png");
 		m_AlsoTexture = Engine::Texture2D::Create("assets/textures/icon.png");
 
