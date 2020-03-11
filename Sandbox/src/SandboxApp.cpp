@@ -82,7 +82,7 @@ public:
 			}		
 		)";
 
-		m_Shader.reset(Engine::Shader::Create(vertex, fragment));
+		m_TriangleShader = Engine::Shader::Create("m_Shader", vertex, fragment);
 
 		std::string vertexSquare = R"(
 			#version 330 core
@@ -108,14 +108,14 @@ public:
 			}		
 		)";
 
-		m_FlatColorShader.reset(Engine::Shader::Create(vertexSquare, fragmentSquare));
+		m_FlatColorShader = Engine::Shader::Create("FlatColorShader", vertexSquare, fragmentSquare);
 
-		m_TextureShader.reset(Engine::Shader::Create("assets/shaders/Texture.glsl"));
+		auto textureShader = m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
 		m_Texture = Engine::Texture2D::Create("assets/textures/Checkerboard.png");
 		m_AlsoTexture = Engine::Texture2D::Create("assets/textures/icon.png");
 
-		std::dynamic_pointer_cast<Engine::OpenGLShader>(m_TextureShader)->Bind();
-		std::dynamic_pointer_cast<Engine::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
+		std::dynamic_pointer_cast<Engine::OpenGLShader>(textureShader)->Bind();
+		std::dynamic_pointer_cast<Engine::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
 	}
 
 	void OnUpdate(Engine::Timestep ts) override
@@ -151,12 +151,14 @@ public:
 			}
 		}
 
+		auto textureShader = m_ShaderLibrary.Get("Texture");
+
 		//Engine::Renderer::Submit(m_Shader, m_VertexArray);
 		m_Texture->Bind();
-		Engine::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+		Engine::Renderer::Submit(textureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
 		m_AlsoTexture->Bind();
-		Engine::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(0.33f)));
+		Engine::Renderer::Submit(textureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(0.33f)));
 
 		Engine::Renderer::EndScene();
 	}
@@ -175,10 +177,11 @@ public:
 	}
 
 private:
-	Engine::Ref<Engine::Shader> m_Shader;
+	Engine::ShaderLibrary m_ShaderLibrary;
+	Engine::Ref<Engine::Shader> m_TriangleShader;
 	Engine::Ref<Engine::VertexArray> m_VertexArray;
 
-	Engine::Ref<Engine::Shader> m_FlatColorShader, m_TextureShader;
+	Engine::Ref<Engine::Shader> m_FlatColorShader;
 	Engine::Ref<Engine::VertexArray> m_SquareVA;
 
 	Engine::Ref<Engine::Texture2D> m_Texture, m_AlsoTexture;
