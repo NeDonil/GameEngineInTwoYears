@@ -8,7 +8,7 @@ class ExampleLayer : public Engine::Layer
 {
 public:
 	ExampleLayer() :
-		Layer("Example"), m_Camera(-1.6, 1.6f, -0.9, 0.9), m_CameraPosition(glm::vec3(0.0f)), m_SquarePosition(glm::vec3(1.0f))
+		Layer("Example"), m_CameraController(1280/720, true), m_SquarePosition(glm::vec3(1.0f))
 	{
 		m_VertexArray.reset(Engine::VertexArray::Create());
 
@@ -120,21 +120,12 @@ public:
 
 	void OnUpdate(Engine::Timestep ts) override
 	{
-		if (Engine::Input::IsKeyPressed(ENGINE_KEY_W))
-			m_CameraPosition.y += m_CameraSpeed * (float) ts;
-		else if (Engine::Input::IsKeyPressed(ENGINE_KEY_S))
-			m_CameraPosition.y -= m_CameraSpeed * (float)ts;
-		if (Engine::Input::IsKeyPressed(ENGINE_KEY_A))
-			m_CameraPosition.x -= m_CameraSpeed * (float)ts;
-		else if (Engine::Input::IsKeyPressed(ENGINE_KEY_D))
-			m_CameraPosition.x += m_CameraSpeed * (float)ts;
+		m_CameraController.OnUpdate(ts);
 
 		Engine::RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
 		Engine::RenderCommand::Clear();
 
-		m_Camera.SetPosition(m_CameraPosition);
-
-		Engine::Renderer::BeginScene(m_Camera);
+		Engine::Renderer::BeginScene(m_CameraController.GetCamera());
 
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1));
 
@@ -173,7 +164,7 @@ public:
 
 	void OnEvent(Engine::Event& event) override
 	{
-		
+		m_CameraController.OnEvent(event);
 	}
 
 private:
@@ -186,9 +177,7 @@ private:
 
 	Engine::Ref<Engine::Texture2D> m_Texture, m_AlsoTexture;
 
-	Engine::OrthographicCamera m_Camera;
-	glm::vec3 m_CameraPosition;
-	float m_CameraSpeed = 5.0f;
+	Engine::OrthographicCameraController m_CameraController;
 	float m_SquareSpeed = 1.0f;
 	glm::vec3 m_SquarePosition;
 	glm::vec3 m_SquareColor = { 0.2f, 0.3f, 0.8f };

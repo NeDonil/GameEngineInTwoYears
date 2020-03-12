@@ -23,6 +23,7 @@
 #include "Engine/Core/Timestep.h"
 
 #include "Engine/Renderer/OrthographicCamera.h"
+#include "Engine/OrthographicCameraController.h"
 
 //---------Entry Point-----------------------------
 #include "Engine/EntryPoint.h"

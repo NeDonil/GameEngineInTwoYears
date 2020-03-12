@@ -58,7 +58,7 @@ namespace Engine
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
 			{
 				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-				WindowResizedEvent event(width, height);
+				WindowResizeEvent event(width, height);
 				data.Width = width;
 				data.Height = height;
 
