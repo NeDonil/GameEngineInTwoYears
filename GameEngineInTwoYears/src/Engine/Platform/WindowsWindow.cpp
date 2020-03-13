@@ -61,7 +61,7 @@ namespace Engine
 				WindowResizeEvent event(width, height);
 				data.Width = width;
 				data.Height = height;
-
+				ENGINE_CORE_WARN("Now Window size is {0}x{1}", width, height);
 				data.EventCallback(event);
 			});
 

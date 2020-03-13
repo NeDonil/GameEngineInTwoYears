@@ -162,9 +162,17 @@ public:
 		ImGui::End();
 	}
 
-	void OnEvent(Engine::Event& event) override
+	void OnEvent(Engine::Event& e) override
 	{
-		m_CameraController.OnEvent(event);
+		m_CameraController.OnEvent(e);
+
+
+		if (e.GetEventType() == Engine::EventType::WindowResize)
+		{
+			auto& re = (Engine::WindowResizeEvent&)e;
+			float zoom = (float)re.GetWidth() / 1280;
+			m_CameraController.SetZoomLevel(zoom);
+		}
 	}
 
 private:
