@@ -1,8 +1,8 @@
 #include "Engine.h"
-#include "Engine/Platform/OpenGL/OpenGLShader.h"
+#include "Platform/OpenGL/OpenGLShader.h"
 #include "glm/gtc/type_ptr.hpp"
 #include "GLAD/glad.h"
-#include "imgui.h"
+#include "Engine/ImGui/ImGuiLayer.h"
 
 class ExampleLayer : public Engine::Layer
 {

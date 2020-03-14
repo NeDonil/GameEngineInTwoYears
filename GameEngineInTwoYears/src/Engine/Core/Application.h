@@ -1,15 +1,15 @@
 #pragma once
 #include "Core.h"
 #include "Window.h"
-#include "Event/ApplicationEvent.h"
-#include "Event/Event.h"
-#include "LayerStack.h"
-#include "ImGui/ImGuiLayer.h"
-#include "Renderer/Shader.h"
-#include "Renderer/Buffer.h"
-#include "Renderer/VertexArray.h"
-#include "Renderer/OrthographicCamera.h"
-#include "Core/Timestep.h"
+#include "Engine/Event/ApplicationEvent.h"
+#include "Engine/Event/Event.h"
+#include "Engine/Core/LayerStack.h"
+#include "Engine/ImGui/ImGuiLayer.h"
+#include "Engine/Renderer/Shader.h"
+#include "Engine/Renderer/Buffer.h"
+#include "Engine/Renderer/VertexArray.h"
+#include "Engine/Renderer/OrthographicCamera.h"
+#include "Engine/Core/Timestep.h"
 
 namespace Engine
 {

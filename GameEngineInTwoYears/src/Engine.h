@@ -1,13 +1,13 @@
 #pragma once
 
 //For use by Applications
-#include "Engine/Application.h"
-#include "Engine/Log.h"
-#include "Engine/Layer.h"
+#include "Engine/Core/Application.h"
+#include "Engine/Core/Log.h"
+#include "Engine/Core/Layer.h"
 
-#include "Engine/Input.h"
-#include "Engine/KeyCodes.h"
-#include "Engine/MouseButtonKeyCodes.h"
+#include "Engine/Core/Input.h"
+#include "Engine/Core/KeyCodes.h"
+#include "Engine/Core/MouseButtonKeyCodes.h"
 #pragma once 
 
 #include "Engine/ImGui/ImGuiLayer.h"
@@ -23,9 +23,9 @@
 #include "Engine/Core/Timestep.h"
 
 #include "Engine/Renderer/OrthographicCamera.h"
-#include "Engine/OrthographicCameraController.h"
+#include "Engine/Renderer/OrthographicCameraController.h"
 
 //---------Entry Point-----------------------------
-#include "Engine/EntryPoint.h"
+#include "Engine/Core/EntryPoint.h"
 //-------------------------------------------------
 #include <glm/glm.hpp>

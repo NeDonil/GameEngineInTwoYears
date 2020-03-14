@@ -1,7 +1,7 @@
 #include <enpch.h>
 #include "Renderer.h"
 #include "RenderCommand.h"
-#include "Engine/Platform/OpenGL/OpenGLShader.h"
+#include "Platform/OpenGL/OpenGLShader.h"
 
 namespace Engine
 {

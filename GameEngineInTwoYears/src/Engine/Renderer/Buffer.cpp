@@ -1,7 +1,7 @@
 #include <enpch.h>
 #include "Buffer.h"
 #include "Renderer.h"
-#include <Engine/Platform/OpenGL/OpenGLBuffer.h>
+#include "Platform/OpenGL/OpenGLBuffer.h"
 
 namespace Engine
 {
