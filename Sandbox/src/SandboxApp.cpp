@@ -8,7 +8,7 @@ class ExampleLayer : public Engine::Layer
 {
 public:
 	ExampleLayer() :
-		Layer("Example"), m_CameraController(1280/720, true), m_SquarePosition(glm::vec3(1.0f))
+		Layer("Example"), m_CameraController(Engine::OrthographicCameraController((float)1280/720)), m_SquarePosition(glm::vec3(1.0f))
 	{
 		m_VertexArray.reset(Engine::VertexArray::Create());
 
@@ -167,12 +167,12 @@ public:
 		m_CameraController.OnEvent(e);
 
 
-		if (e.GetEventType() == Engine::EventType::WindowResize)
-		{
-			auto& re = (Engine::WindowResizeEvent&)e;
-			float zoom = (float)re.GetWidth() / 1280;
-			m_CameraController.SetZoomLevel(zoom);
-		}
+		//if (e.GetEventType() == Engine::EventType::WindowResize)
+		//{
+		//	auto& re = (Engine::WindowResizeEvent&)e;
+		//	float zoom = (float)re.GetWidth() / 1280;
+		//	m_CameraController.SetZoomLevel(zoom);
+		//}
 	}
 
 private:
