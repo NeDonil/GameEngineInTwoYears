@@ -22,6 +22,7 @@
 
 #include "Engine/Core/Timestep.h"
 
+#include "Engine/Renderer/Renderer2D.h"
 #include "Engine/Renderer/OrthographicCamera.h"
 #include "Engine/Renderer/OrthographicCameraController.h"
 

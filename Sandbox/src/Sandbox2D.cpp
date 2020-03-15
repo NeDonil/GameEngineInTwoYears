@@ -44,21 +44,15 @@ void Sandbox2D::OnUpdate(Engine::Timestep ts)
 	Engine::RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
 	Engine::RenderCommand::Clear();
 
-	Engine::Renderer::BeginScene(m_CameraController.GetCamera());
-
-	glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1));
-
-	Engine::Renderer::Submit(m_Shader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
-
-	std::dynamic_pointer_cast<Engine::OpenGLShader>(m_Shader)->UploadUniformFloat3("u_Color", m_SquareColor);
-
-	Engine::Renderer::EndScene();
+	Engine::Renderer2D::BeginScene(m_CameraController.GetCamera());
+	Engine::Renderer2D::DrawQuad({ 0.5f, 0.5f }, { 1, 1 }, m_SquareColor);
+	Engine::Renderer2D::EndScene();
 }
 
 void Sandbox2D::OnImGuiRender()
 {
 	ImGui::Begin("Settings");
-	ImGui::ColorEdit3("Square color", glm::value_ptr(m_SquareColor));
+	ImGui::ColorEdit4("Square color", glm::value_ptr(m_SquareColor));
 	ImGui::End();
 }
 
