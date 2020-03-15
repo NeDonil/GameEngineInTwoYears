@@ -25,7 +25,9 @@
 #include "Engine/Renderer/OrthographicCamera.h"
 #include "Engine/Renderer/OrthographicCameraController.h"
 
-//---------Entry Point-----------------------------
-#include "Engine/Core/EntryPoint.h"
 //-------------------------------------------------
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+//---------OpenGL----------------------------------
+#include "Platform/OpenGL/OpenGLShader.h"

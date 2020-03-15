@@ -3,6 +3,7 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "GLAD/glad.h"
 #include "Engine/ImGui/ImGuiLayer.h"
+#include "Sandbox2D.h"
 
 class ExampleLayer : public Engine::Layer
 {
@@ -10,14 +11,14 @@ public:
 	ExampleLayer() :
 		Layer("Example"), m_CameraController(Engine::OrthographicCameraController((float)1280/720)), m_SquarePosition(glm::vec3(1.0f))
 	{
-		m_VertexArray.reset(Engine::VertexArray::Create());
+		m_VertexArray = Engine::VertexArray::Create();
 
 		float vertices[] = { -0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
 							  0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
 							  0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f }; 
 
 		Engine::Ref<Engine::VertexBuffer> vertexBuffer;
-		vertexBuffer.reset(Engine::VertexBuffer::Create(vertices, sizeof(vertices)));
+		vertexBuffer = Engine::VertexBuffer::Create(vertices, sizeof(vertices));
 
 		Engine::BufferLayout layout = {
 			{Engine::ShaderDataType::Float3, "a_Position"},
@@ -29,17 +30,17 @@ public:
 
 		uint32_t indices[] = { 0, 1, 2 };
 		Engine::Ref<Engine::IndexBuffer> indexBuffer;
-		indexBuffer.reset(Engine::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		indexBuffer = Engine::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 		//---------------------------------------------------------------------------------------------
-		m_SquareVA.reset(Engine::VertexArray::Create());
+		m_SquareVA = Engine::VertexArray::Create();
 
 		float SquareVertices[] = {	-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
 									-0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
 									 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
 									 0.5f, -0.5f, 0.0f, 1.0f, 0.0f };
 		Engine::Ref<Engine::VertexBuffer> squareVB;
-		squareVB.reset(Engine::VertexBuffer::Create(SquareVertices, sizeof(SquareVertices)));
+		squareVB = Engine::VertexBuffer::Create(SquareVertices, sizeof(SquareVertices));
 		squareVB->SetLayout({
 			{Engine::ShaderDataType::Float3, "a_Position"},
 			{Engine::ShaderDataType::Float2, "a_TexCoord"}
@@ -48,7 +49,7 @@ public:
 
 		uint32_t SquareIndices[] = { 0, 1, 2, 2, 0, 3 };
 		Engine::Ref<Engine::IndexBuffer> squareIB;
-		squareIB.reset(Engine::IndexBuffer::Create(SquareIndices, sizeof(SquareIndices) / sizeof(uint32_t)));
+		squareIB = Engine::IndexBuffer::Create(SquareIndices, sizeof(SquareIndices) / sizeof(uint32_t));
 		m_SquareVA->SetIndexBuffer(squareIB);
 
 		std::string vertex = R"(
@@ -167,12 +168,12 @@ public:
 		m_CameraController.OnEvent(e);
 
 
-		//if (e.GetEventType() == Engine::EventType::WindowResize)
-		//{
-		//	auto& re = (Engine::WindowResizeEvent&)e;
-		//	float zoom = (float)re.GetWidth() / 1280;
-		//	m_CameraController.SetZoomLevel(zoom);
-		//}
+		if (e.GetEventType() == Engine::EventType::WindowResize)
+		{
+			auto& re = (Engine::WindowResizeEvent&)e;
+			float zoom = (float)re.GetWidth() / 1280;
+			m_CameraController.SetZoomLevel(zoom);
+		}
 	}
 
 private:
@@ -196,7 +197,8 @@ class Sandbox : public Engine::Application
 public:
 	Sandbox()
 	{
-		PushLayer(new ExampleLayer());
+		//PushLayer(new ExampleLayer());
+		PushLayer(new Sandbox2D());
 	}
 
 	~Sandbox()
