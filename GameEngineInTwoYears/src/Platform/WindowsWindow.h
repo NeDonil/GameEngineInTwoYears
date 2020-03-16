@@ -19,10 +19,8 @@ namespace Engine
 		inline unsigned int GetHeight() const override { return m_Data.Height; }
 
 		inline void SetEventCallback(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; }
-		void SetVSync(bool enabled);
-		bool IsVSync() const;
-
-		GLFWwindow* getWindowPointer();
+		void SetVSync(bool enabled) override;
+		bool IsVSync() const override;
 
 		inline virtual void* GetNativeWindow() const { return m_Window; };
 	private:
@@ -30,7 +28,7 @@ namespace Engine
 		virtual void Shutdown();
 	private:
 		GLFWwindow* m_Window;
-		GraphicsContext* m_Context;
+		Scope<GraphicsContext> m_Context;
 
 		struct WindowData
 		{

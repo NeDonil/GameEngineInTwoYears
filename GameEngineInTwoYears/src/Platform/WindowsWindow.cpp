@@ -16,9 +16,9 @@ namespace Engine
 		ENGINE_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
 	}
 
-	Window* Window::Create(const WindowProps& props)
+	Scope<Window> Window::Create(const WindowProps& props)
 	{
-		return new WindowsWindow(props);
+		return std::make_unique<WindowsWindow>(props);
 	}
 
 	WindowsWindow::WindowsWindow(const WindowProps& props)
@@ -49,7 +49,7 @@ namespace Engine
 		}
 
 		m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
-		m_Context = new OpenGLContext(m_Window);
+		m_Context = GraphicsContext::Create(m_Window);
 		m_Context->Init();
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
@@ -160,7 +160,6 @@ namespace Engine
 	{
 		glfwPollEvents();
 		m_Context->SwapBuffers();
-		glfwSwapBuffers(m_Window);
 	}
 
 	void WindowsWindow::SetVSync(bool enabled)
@@ -175,10 +174,5 @@ namespace Engine
 	bool WindowsWindow::IsVSync() const
 	{
 		return m_Data.VSync;
-	}
-
-	GLFWwindow* WindowsWindow::getWindowPointer()
-	{
-		return m_Window;
 	}
 }

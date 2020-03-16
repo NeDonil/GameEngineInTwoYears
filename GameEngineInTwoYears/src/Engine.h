@@ -8,9 +8,7 @@
 #include "Engine/Core/Input.h"
 #include "Engine/Core/KeyCodes.h"
 #include "Engine/Core/MouseButtonKeyCodes.h"
-#pragma once 
 
-#include "Engine/ImGui/ImGuiLayer.h"
 //---------Renderer--------------------------------
 #include "Engine/Renderer/Renderer.h"
 #include "Engine/Renderer/RenderCommand.h"

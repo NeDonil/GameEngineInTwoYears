@@ -7,7 +7,7 @@ out vec2 v_TexCoord;
 		
 uniform mat4 u_ViewProjection;
 uniform mat4 u_Transform;
-//////////////////////////////////////////////////////////////////////////////////
+
 void main()
 {
 	v_TexCoord = a_TexCoord;
@@ -18,11 +18,12 @@ void main()
 #version 330 core
 
 in vec2 v_TexCoord;
+out vec4 color;
 
 uniform sampler2D u_Texture;
 
 void main()
 {
-	gl_FragColor = texture(u_Texture, v_TexCoord);
+	color = texture(u_Texture, v_TexCoord * 10);
 }		
 		
