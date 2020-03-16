@@ -2,6 +2,7 @@
 #include <GLAD/glad.h>
 #include <glm/glm.hpp>
 #include <Engine/Renderer/Shader.h>
+
 namespace Engine
 {
 	class OpenGLShader : public Shader
@@ -15,6 +16,9 @@ namespace Engine
 		virtual void Unbind() const override;
 
 		virtual const std::string& GetName() const override { return m_Name; }
+		virtual void SetMat4(const std::string& name, const glm::mat4& value) override;
+		virtual void SetFloat3(const std::string& name, const glm::vec3& value) override;
+		virtual void SetFloat4(const std::string& name, const glm::vec4& value) override;
 
 		void UploadUniformInt(const std::string& name, int value);
 
