@@ -10,6 +10,7 @@ Sandbox2D::Sandbox2D():
 void Sandbox2D::OnAttach()
 {
 	m_CheckerboardTexture = Engine::Texture2D::Create("assets/textures/Checkerboard.png");
+	m_Texture = Engine::Texture2D::Create("assets/textures/icon.png");
 }
 
 void Sandbox2D::OnDetach()
