@@ -34,6 +34,4 @@ private:
 		float Time;
 	};
 
-	std::vector<ProfileResult> m_ProfileResults;
-
 };
