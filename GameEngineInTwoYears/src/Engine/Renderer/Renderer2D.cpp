@@ -68,9 +68,10 @@ namespace Engine
 
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, float tiles = 1.0f)
 	{
 		s_Data->TextureShader->SetFloat4("u_Color", color);
+		s_Data->TextureShader->SetFloat("u_TileMult", tiles);
 		s_Data->WhiteTexture->Bind();
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * /* rotation */ glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
@@ -81,9 +82,10 @@ namespace Engine
 	}
 
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture>& texture)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture>& texture, float tiles = 1.0f)
 	{
 		s_Data->TextureShader->SetFloat4("u_Color", glm::vec4(1.0f));
+		s_Data->TextureShader->SetFloat("u_TileMult", tiles);
 		texture->Bind();
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * /* rotation */ glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
@@ -93,13 +95,49 @@ namespace Engine
 		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const glm::vec4& color, float tiles)
 	{
-		DrawQuad({ position.x, position.y, 1.0f }, size, color);
+		DrawRotatedQuad({ position.x, position.y, 0.0f }, size, rotation, color, tiles);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture>& texture)
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const glm::vec4& color, float tiles)
 	{
-		DrawQuad({ position.x, position.y, 1.0f}, size, texture);
+		s_Data->TextureShader->SetFloat4("u_Color", color);
+		s_Data->TextureShader->SetFloat("u_TileMult", tiles);
+		s_Data->WhiteTexture->Bind();
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), rotation, glm::vec3(0.0f, 0.0f, 1.0f)) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+		s_Data->TextureShader->SetMat4("u_Transform", transform);
+
+		s_Data->QuadVertexArray->Bind();
+		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const Ref<Texture>& texture, float tiles)
+	{
+		DrawRotatedQuad({ position.x, position.y, 0.0f }, size, rotation, texture, tiles);
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const Ref<Texture>& texture, float tiles)
+	{
+		s_Data->TextureShader->SetFloat4("u_Color", glm::vec4(1.0f));
+		s_Data->TextureShader->SetFloat("u_TileMult", tiles);
+		texture->Bind();
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), rotation, glm::vec3(0.0f, 0.0f, 1.0f)) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+		s_Data->TextureShader->SetMat4("u_Transform", transform);
+
+		s_Data->QuadVertexArray->Bind();
+		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color, float tiles = 1.0f)
+	{
+		DrawQuad({ position.x, position.y, 1.0f }, size, color, tiles);
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture>& texture, float tiles = 1.0f)
+	{
+		DrawQuad({ position.x, position.y, 1.0f}, size, texture, tiles);
 	}
 }

@@ -22,9 +22,10 @@ out vec4 color;
 
 uniform sampler2D u_Texture;
 uniform vec4 u_Color;
+uniform float u_TileMult;
 
 void main()
 {
-	color = texture(u_Texture, v_TexCoord * 10) * u_Color;
+	color = texture(u_Texture, v_TexCoord * u_TileMult) * u_Color;
 }		
 		
