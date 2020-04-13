@@ -17,15 +17,28 @@ namespace Engine
 		return nullptr;
 	}
 
-	Ref<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t size)
+	Ref<VertexBuffer> VertexBuffer::Create(uint32_t size)
 	{
 		switch (Renderer::GetAPI())
 		{
 			case RendererAPI::API::None: ENGINE_CORE_ASSERT(false, "RendererAPI:None is not supported now"); return nullptr;
-			case RendererAPI::API::OpenGL: return std::make_shared<OpenGLIndexBuffer>(indices, size);
+			case RendererAPI::API::OpenGL: return std::make_shared<OpenGLVertexBuffer>(size);
 		}
 
 		ENGINE_CORE_ASSERT(false, "Unknown RendereAPI!");
 		return nullptr;
 	}
+
+	Ref<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t count)
+	{
+		switch (Renderer::GetAPI())
+		{
+			case RendererAPI::API::None: ENGINE_CORE_ASSERT(false, "RendererAPI:None is not supported now"); return nullptr;
+			case RendererAPI::API::OpenGL: return std::make_shared<OpenGLIndexBuffer>(indices, count);
+		}
+
+		ENGINE_CORE_ASSERT(false, "Unknown RendereAPI!");
+		return nullptr;
+	}
+
 }
