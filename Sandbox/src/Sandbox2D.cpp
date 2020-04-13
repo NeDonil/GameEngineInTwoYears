@@ -40,15 +40,13 @@ void Sandbox2D::OnUpdate(Engine::Timestep ts)
 		ENGINE_PROFILE_SCOPE("Sandbox2D::Renderer draw");
 		Engine::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-		for (int i = 0; i < 100; i += 2)
-		{
-			Engine::Renderer2D::DrawQuad({ 0.0f,  i -0.0f },  { 3.0, 0.25 }, m_RedColor);
-			Engine::Renderer2D::DrawQuad({ 0.0f,  i -0.25f }, { 3.0, 0.25 }, m_OrangeColor);
-			Engine::Renderer2D::DrawQuad({ 0.0f,  i -0.50f }, { 3.0, 0.25 }, m_YellowColor);
-			Engine::Renderer2D::DrawQuad({ 0.0f,  i -0.75f }, { 3.0, 0.25 }, m_GreenColor);
-			Engine::Renderer2D::DrawQuad({ 0.0f,  i -1.0f },  { 3.0, 0.25 }, m_BlueColor);
-			Engine::Renderer2D::DrawQuad({ 0.0f,  i -1.25f }, { 3.0, 0.25 }, m_PurpleColor);
-		}
+		Engine::Renderer2D::DrawQuad({ 1.5f,  -1.0f }, { 5.0, 0.25 }, m_RedColor);
+		Engine::Renderer2D::DrawQuad({ 1.5f,  -1.25f }, { 5.0, 0.25 }, m_OrangeColor);
+		Engine::Renderer2D::DrawQuad({ 1.5f,  -1.50f }, { 5.0, 0.25 }, m_YellowColor);
+		Engine::Renderer2D::DrawQuad({ 1.5f,  -1.75f }, { 5.0, 0.25 }, m_GreenColor);
+		Engine::Renderer2D::DrawQuad({ 1.5f,  -2.0f }, { 5.0, 0.25 }, m_BlueColor);
+		Engine::Renderer2D::DrawQuad({ 1.5f,  -2.25f }, { 5.0, 0.25 }, m_PurpleColor);
+		Engine::Renderer2D::DrawQuad({ -3, -3 }, { 20.0f, 20.0f}, m_CheckerboardTexture, 40.0f);
 
 		Engine::Renderer2D::EndScene();
 	}
