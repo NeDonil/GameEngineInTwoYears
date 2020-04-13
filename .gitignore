@@ -9,5 +9,9 @@ bin-int
 **.vcxproj.filters
 **.vcxproj.user
 
+#Profiler files
+
+**.json
+
 #ImGui files
 Sandbox/imgui.ini

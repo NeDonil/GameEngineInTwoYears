@@ -1,1 +1,0 @@
-{"otherData": {},"traceEvents":[{"cat":"function","dur":1,"name":"__cdecl Sandbox2D::Sandbox2D(void)","ph":"X","pid":0,"tid":763990991,"ts":1272705110970},{"cat":"function","dur":2580,"name":"void __cdecl Sandbox2D::OnAttach(void)","ph":"X","pid":0,"tid":763990991,"ts":1272705111354}]}
