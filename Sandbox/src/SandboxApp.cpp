@@ -4,6 +4,7 @@
 #include "GLAD/glad.h"
 #include "Engine/ImGui/ImGuiLayer.h"
 #include "Sandbox2D.h"
+#include "Test.h"
 
 class ExampleLayer : public Engine::Layer
 {
@@ -198,7 +199,7 @@ public:
 	Sandbox()
 	{
 		//PushLayer(new ExampleLayer());
-		PushLayer(new Sandbox2D());
+		PushLayer(new Test());
 	}
 
 	~Sandbox()
