@@ -19,15 +19,9 @@ private:
 	Engine::Ref<Engine::VertexArray> m_SquareVA;
 	Engine::Ref<Engine::Texture2D> m_Texture;
 	Engine::Ref<Engine::Texture2D> m_CheckerboardTexture;
+	Engine::Ref<Engine::Texture2D> m_SpritesheetTexture;
 
 	glm::vec4 m_SquareColor = { 0.8f, 0.3f, 0.2f, 1.0f};
-
-	glm::vec4 m_RedColor    = { 1.0f,  0.0f,  0.0f,  1.0f };
-	glm::vec4 m_OrangeColor = { 1.0f,  0.65f, 0.0f,  1.0f };
-	glm::vec4 m_YellowColor = { 1.0f,  1.0f,  0.0f,  1.0f };
-	glm::vec4 m_GreenColor  = { 0.0f,  1.0f,  0.0f,  1.0f };
-	glm::vec4 m_BlueColor   = { 0.0f,  0.0f,  1.0f,  1.0f };
-	glm::vec4 m_PurpleColor = { 0.5f,  0.0f,  0.5f,  1.0f };
 
 	struct ProfileResult {
 		const char* Name;

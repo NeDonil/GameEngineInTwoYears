@@ -2,7 +2,6 @@
 #include "Sandbox2D.h"
 #include "Engine/Core/EntryPoint.h"
 
-
 Sandbox2D::Sandbox2D():
 	Layer("Layer2D"), m_CameraController((float)1280 / 720, true)
 {
@@ -12,6 +11,7 @@ Sandbox2D::Sandbox2D():
 void Sandbox2D::OnAttach()
 {
 	ENGINE_PROFILE_FUNCTION();
+	m_SpritesheetTexture = Engine::Texture2D::Create("assets/game/textures/spritesheet.png");
 	m_CheckerboardTexture = Engine::Texture2D::Create("assets/textures/Checkerboard.png");
 	m_Texture = Engine::Texture2D::Create("assets/textures/icon.png");
 }
@@ -41,15 +41,10 @@ void Sandbox2D::OnUpdate(Engine::Timestep ts)
 		ENGINE_PROFILE_SCOPE("Sandbox2D::Renderer draw");
 		Engine::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-		Engine::Renderer2D::DrawQuad({ 0, 0, -0.1f }, { 20.0f, 20.0f}, m_CheckerboardTexture, 20.0f);
+		//Engine::Renderer2D::DrawQuad({ 0, 0, -0.1f }, { 20.0f, 20.0f}, m_CheckerboardTexture, 20.0f);
+		Engine::Renderer2D::DrawQuad({ 0.0f, 0.0f, 0.0f }, { 0.25f, 0.25f }, m_SpritesheetTexture);
 
-		//Engine::Renderer2D::DrawQuad({ 1.5f,  -1.0f, 0.2f }, { 5.0, 0.25 }, m_RedColor);
-		//Engine::Renderer2D::DrawQuad({ 1.5f,  -1.25f, 0.2f}, { 5.0, 0.25 }, m_OrangeColor);
-		//Engine::Renderer2D::DrawQuad({ 1.5f,  -1.50f, 0.2f}, { 5.0, 0.25 }, m_YellowColor);
-		//Engine::Renderer2D::DrawQuad({ 1.5f,  -1.75f, 0.2f}, { 5.0, 0.25 }, m_GreenColor);
-		//Engine::Renderer2D::DrawQuad({ 1.5f,  -2.0f , 0.2f}, { 5.0, 0.25 }, m_BlueColor);
-		//Engine::Renderer2D::DrawQuad({ 1.5f,  -2.25f, 0.2f}, { 5.0, 0.25 }, m_PurpleColor);
-
+#ifdef ACTIVE
 		for (float y = 0.0f; y < 20.0f; y += 0.5f)
 		{
 			for (float x = 0.0f; x < 20.0f; x += 0.5f)
@@ -69,6 +64,7 @@ void Sandbox2D::OnUpdate(Engine::Timestep ts)
 		Engine::Renderer2D::DrawRotatedQuad({ 7.0f,  5.0f, 0.15f }, { 0.5, 0.5 }, 60.0f, m_Texture);
 		Engine::Renderer2D::DrawRotatedQuad({ 8.0f,  5.0f, 0.15f }, { 0.5, 0.5 }, 90.0f, m_Texture);
 
+#endif
 		Engine::Renderer2D::EndScene();
 	}
 }
