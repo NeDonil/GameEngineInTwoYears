@@ -14,6 +14,9 @@ void Sandbox2D::OnAttach()
 	m_SpritesheetTexture = Engine::Texture2D::Create("assets/game/textures/spritesheet.png");
 	m_CheckerboardTexture = Engine::Texture2D::Create("assets/textures/Checkerboard.png");
 	m_Texture = Engine::Texture2D::Create("assets/textures/icon.png");
+
+	m_SpriteStairs = Engine::SubTexture2D::GetFromCoords(m_SpritesheetTexture, { 7.0f, 6.0f }, { 128.0f, 128.0f });
+	m_SpriteTree = Engine::SubTexture2D::GetFromCoords(m_SpritesheetTexture, { 5.0f, 1.0f }, { 128.0f, 128.0f }, {1.0f, 2.0f});
 }
 
 void Sandbox2D::OnDetach()
@@ -41,8 +44,9 @@ void Sandbox2D::OnUpdate(Engine::Timestep ts)
 		ENGINE_PROFILE_SCOPE("Sandbox2D::Renderer draw");
 		Engine::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-		//Engine::Renderer2D::DrawQuad({ 0, 0, -0.1f }, { 20.0f, 20.0f}, m_CheckerboardTexture, 20.0f);
-		Engine::Renderer2D::DrawQuad({ 0.0f, 0.0f, 0.0f }, { 0.25f, 0.25f }, m_SpritesheetTexture);
+		Engine::Renderer2D::DrawQuad({ 0, 0, -0.1f }, { 20.0f, 20.0f}, m_CheckerboardTexture, 20.0f);
+		Engine::Renderer2D::DrawQuad({ -1.0f, 1.0f, 0.0f }, { 1.0f, 2.0f }, m_SpriteTree);
+		Engine::Renderer2D::DrawQuad({ 1.0f, 1.0f, 0.0f }, { 1.0f, 1.0f }, m_SpriteStairs);
 
 #ifdef ACTIVE
 		for (float y = 0.0f; y < 20.0f; y += 0.5f)

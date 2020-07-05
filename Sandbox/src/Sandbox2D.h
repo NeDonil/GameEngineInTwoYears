@@ -20,6 +20,8 @@ private:
 	Engine::Ref<Engine::Texture2D> m_Texture;
 	Engine::Ref<Engine::Texture2D> m_CheckerboardTexture;
 	Engine::Ref<Engine::Texture2D> m_SpritesheetTexture;
+	Engine::Ref<Engine::SubTexture2D> m_SpriteStairs;
+	Engine::Ref<Engine::SubTexture2D> m_SpriteTree;
 
 	glm::vec4 m_SquareColor = { 0.8f, 0.3f, 0.2f, 1.0f};
 
