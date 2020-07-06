@@ -11,12 +11,19 @@ Sandbox2D::Sandbox2D():
 void Sandbox2D::OnAttach()
 {
 	ENGINE_PROFILE_FUNCTION();
+	
+	m_GirlsheetTexture = Engine::Texture2D::Create("assets/game/textures/character_femalePerson_sheetHD.png");
 	m_SpritesheetTexture = Engine::Texture2D::Create("assets/game/textures/spritesheet.png");
-	m_CheckerboardTexture = Engine::Texture2D::Create("assets/textures/Checkerboard.png");
-	m_Texture = Engine::Texture2D::Create("assets/textures/icon.png");
 
-	m_SpriteStairs = Engine::SubTexture2D::GetFromCoords(m_SpritesheetTexture, { 7.0f, 6.0f }, { 128.0f, 128.0f });
-	m_SpriteTree = Engine::SubTexture2D::GetFromCoords(m_SpritesheetTexture, { 5.0f, 1.0f }, { 128.0f, 128.0f }, {1.0f, 2.0f});
+	m_SpriteStairs = Engine::SubTexture2D::GetFromCoords(m_SpritesheetTexture, { 1.0f, 11.0f }, { 128.0f, 128.0f });
+	m_Animation = Engine::Animation2D::Create(m_GirlsheetTexture, { 0.0f, 0.0f }, { 192.0f, 256.0f }, 8, 0.1f);
+
+	m_Animation->SetPosition({ 0.0, 0.0f, 1.0f});
+	m_Animation->SetSize({ 1.0f, 1.0f });
+
+	//m_SpriteMap['T'] = Engine::SubTexture2D::GetFromCoords(m_SpritesheetTexture, { 1.0f, 11.0f }, { 128.0f, 128.0f });
+	//m_SpriteMap['D'] = Engine::SubTexture2D::GetFromCoords(m_SpritesheetTexture, { 6.0f, 11.0f }, { 128.0f, 128.0f });
+	//m_SpriteMap['W'] = Engine::SubTexture2D::GetFromCoords(m_SpritesheetTexture, { 11.0f, 11.0f }, { 128.0f, 128.0f });
 }
 
 void Sandbox2D::OnDetach()
@@ -27,6 +34,8 @@ void Sandbox2D::OnDetach()
 void Sandbox2D::OnUpdate(Engine::Timestep ts)
 {
 	ENGINE_PROFILE_FUNCTION();
+
+	m_Animation->OnUpdate(ts);
 
 	{
 		ENGINE_PROFILE_SCOPE("Sandbox2D::OnUpdate");
@@ -44,9 +53,11 @@ void Sandbox2D::OnUpdate(Engine::Timestep ts)
 		ENGINE_PROFILE_SCOPE("Sandbox2D::Renderer draw");
 		Engine::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-		Engine::Renderer2D::DrawQuad({ 0, 0, -0.1f }, { 20.0f, 20.0f}, m_CheckerboardTexture, 20.0f);
-		Engine::Renderer2D::DrawQuad({ -1.0f, 1.0f, 0.0f }, { 1.0f, 2.0f }, m_SpriteTree);
-		Engine::Renderer2D::DrawQuad({ 1.0f, 1.0f, 0.0f }, { 1.0f, 1.0f }, m_SpriteStairs);
+		//Engine::Renderer2D::DrawQuad({ 1.0f, -20.0f, 1.0f}, { 5.0f, 10.0f });
+
+		Engine::Renderer2D::EndScene();
+
+		m_Animation->Draw(m_CameraController.GetCamera());
 
 #ifdef ACTIVE
 		for (float y = 0.0f; y < 20.0f; y += 0.5f)
@@ -69,7 +80,6 @@ void Sandbox2D::OnUpdate(Engine::Timestep ts)
 		Engine::Renderer2D::DrawRotatedQuad({ 8.0f,  5.0f, 0.15f }, { 0.5, 0.5 }, 90.0f, m_Texture);
 
 #endif
-		Engine::Renderer2D::EndScene();
 	}
 }
 
