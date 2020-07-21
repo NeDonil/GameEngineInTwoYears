@@ -28,7 +28,7 @@ namespace Engine
 			}
 
 			particle.LifeRemaining -= ts;
-			particle.Position += glm::vec3(particle.Velocity.x* (float)ts, particle.Velocity.y* (float)ts, 0.0f);
+			particle.Position += particle.Velocity * (float)ts;
 			particle.Rotation += 0.01f * ts;
 		}
 	}
