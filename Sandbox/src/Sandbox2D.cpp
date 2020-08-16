@@ -12,7 +12,14 @@ void Sandbox2D::OnAttach()
 {
 	ENGINE_PROFILE_FUNCTION();
 	
-	m_CheckerboardTexture = Engine::Texture2D::Create("assets/textures/Checkerboard.png");
+	m_CheckerboardTexture = Engine::Texture2D::Create("assets/textures/clown.png");
+
+	Engine::FramebufferSpecification fbSpec;
+
+	fbSpec.Width = 1280;
+	fbSpec.Height = 720;
+
+	m_Framebuffer = Engine::Framebuffer::Create(fbSpec);
 }
 
 void Sandbox2D::OnDetach()
@@ -32,6 +39,7 @@ void Sandbox2D::OnUpdate(Engine::Timestep ts)
 	Engine::Renderer2D::ResetStats();
 	{
 		ENGINE_PROFILE_SCOPE("Sandbox2D::Renderer prep");
+		m_Framebuffer->Bind();
 		Engine::RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
 		Engine::RenderCommand::Clear();
 	}
@@ -41,9 +49,13 @@ void Sandbox2D::OnUpdate(Engine::Timestep ts)
 		Engine::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
 		Engine::Renderer2D::DrawQuad({ 0.0f, 0.0f }, { 1.0f, 1.0f }, {0.2f, 0.5f, 0.8f, 1.0f});
+		Engine::Renderer2D::DrawQuad({ 0.0f, -2.0f }, { 1.0f, 1.0f }, { 0.5f, 0.2f, 0.8f, 1.0f });
+
+		Engine::Renderer2D::DrawQuad({ 2.0f, 0.0f }, { 1.0f, 1.0f }, m_CheckerboardTexture);
+		Engine::Renderer2D::DrawQuad({ 2.0f, -2.0f }, { 1.0f, 1.0f }, m_CheckerboardTexture);
 
 		Engine::Renderer2D::EndScene();
-
+		m_Framebuffer->Unbind();
 
 #ifdef ACTIVE
 		for (float y = 0.0f; y < 20.0f; y += 0.5f)
@@ -144,8 +156,8 @@ void Sandbox2D::OnImGuiRender()
 		ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 
-		uint32_t textureID = m_CheckerboardTexture->GetRendererID();
-		ImGui::Image((void*)textureID, ImVec2{ 256.0f, 256.0f });
+		uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
+		ImGui::Image((void*)textureID, ImVec2{ 1280, 720.0f });
 		ImGui::End();
 
 		ImGui::End();
@@ -167,7 +179,7 @@ void Sandbox2D::OnImGuiRender()
 		ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
 
 		uint32_t textureID = m_CheckerboardTexture->GetRendererID();
-		ImGui::Image((void*)textureID, ImVec2{ 256.0f, 256.0f });
+		ImGui::Image((void*)textureID, ImVec2{ 320.0f, 320.0f });
 		ImGui::End();
 	}
 }
