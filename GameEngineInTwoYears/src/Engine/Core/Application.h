@@ -16,7 +16,7 @@ namespace Engine
 	class ENGINE_API Application 
 	{
 	public:
-		Application();
+		Application(const char* name = "Unknow Application");
 		virtual ~Application();
 
 		void Run();

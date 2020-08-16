@@ -1,12 +1,11 @@
 #pragma once
 #include "Engine.h"
-#include "Engine/Renderer/Animation2D.h"
 #include <vector>
 
-class Sandbox2D : public Engine::Layer
+class EditorLayer : public Engine::Layer
 {
 public:
-	Sandbox2D();
+	EditorLayer();
 
 	virtual void OnAttach() override;
 	virtual void OnDetach() override;
@@ -16,6 +15,7 @@ public:
 private:
 	Engine::OrthographicCameraController m_CameraController;
 
+	Engine::Ref<Engine::Framebuffer> m_Framebuffer;
 	Engine::Ref<Engine::Texture2D> m_CheckerboardTexture;
 
 	glm::vec4 m_SquareColor = { 0.8f, 0.3f, 0.2f, 1.0f};

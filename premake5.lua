@@ -133,3 +133,53 @@ project "Sandbox"
 		defines "ENGINE_RELEASE"
 		optimize "on"
 
+
+project "Editor"
+	location "Editor"
+	kind "ConsoleApp"
+	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
+
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	files
+	{
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/glm/glm/**.hpp",
+		"%{prj.name}/vendor/glm/glm/**.inl"
+	}
+
+	includedirs
+	{
+		"GameEngineInTwoYears/vendor/spdlog/include",
+		"GameEngineInTwoYears/vendor/glm",
+		"%{IncludeDir.Glad}",
+		"%{IncludeDir.ImGui}",
+		"GameEngineInTwoYears/src"
+	}
+
+	links
+	{
+		"GameEngineInTwoYears",
+		"Glad",
+		"ImGui"
+	}
+
+	filter "system:windows"
+		systemversion "latest"
+
+		defines
+		{
+			"ENGINE_PLATFORM_WINDOWS"
+		}
+
+	filter "configurations:Debug"
+		defines "ENGINE_DEBUG"
+		symbols "on"
+
+	filter "configurations:Release"
+		defines "ENGINE_RELEASE"
+		optimize "on"

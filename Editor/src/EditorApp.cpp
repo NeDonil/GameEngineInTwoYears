@@ -3,22 +3,22 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "GLAD/glad.h"
 #include "Engine/ImGui/ImGuiLayer.h"
-#include "Sandbox2D.h"
+#include "EditorLayer.h"
 
-class Sandbox : public Engine::Application
+class Editor : public Engine::Application
 {
 public:
-	Sandbox()
-		: Application("Sandbox")
+	Editor()
+		:Application("Editor")
 	{
-		PushLayer(new Sandbox2D());
+		PushLayer(new EditorLayer());
 	}
 
-	~Sandbox()
+	~Editor()
 	{
 	}
 };
 Engine::Application* Engine::CreateApplication()
 {
-	return new Sandbox();
+	return new Editor();
 }
