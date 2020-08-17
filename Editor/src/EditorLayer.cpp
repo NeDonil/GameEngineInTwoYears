@@ -49,13 +49,14 @@ void EditorLayer::OnUpdate(Engine::Timestep ts)
 		ENGINE_PROFILE_SCOPE("EditorLayer::Renderer draw");
 		Engine::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-		Engine::Renderer2D::DrawQuad({ 0.0f, 0.0f }, { 1.0f, 1.0f }, {0.2f, 0.5f, 0.8f, 1.0f});
-		Engine::Renderer2D::DrawQuad({ 0.0f, -2.0f }, { 1.0f, 1.0f }, { 0.5f, 0.2f, 0.8f, 1.0f });
+		Engine::Renderer2D::DrawQuad({ 0.0f, 0.0f, 1.0f }, { 1.0f, 1.0f }, {0.2f, 0.5f, 0.8f, 1.0f});
+		Engine::Renderer2D::DrawQuad({ 0.0f, -2.0f, 1.0f }, { 1.0f, 1.0f }, { 0.5f, 0.2f, 0.8f, 1.0f });
 
-		Engine::Renderer2D::DrawQuad({ 2.0f, 0.0f }, { 1.0f, 1.0f }, m_CheckerboardTexture);
-		Engine::Renderer2D::DrawQuad({ 2.0f, -2.0f }, { 1.0f, 1.0f }, m_CheckerboardTexture);
+		Engine::Renderer2D::DrawQuad({ 2.0f, 0.0f, 1.0f }, { 1.0f, 1.0f }, m_CheckerboardTexture);
+		Engine::Renderer2D::DrawQuad({ 2.0f, -2.0f, 1.0f }, { 1.0f, 1.0f }, m_CheckerboardTexture);
 
 		Engine::Renderer2D::EndScene();
+
 		m_Framebuffer->Unbind();
 	}
 }
@@ -98,46 +99,58 @@ void EditorLayer::OnImGuiRender()
 		// We cannot preserve the docking relationship between an active window and an inactive docking, otherwise 
 		// any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+
 		ImGui::Begin("DockSpace Demo", &dockspaceOpen, window_flags);
-		ImGui::PopStyleVar();
+			ImGui::PopStyleVar();
 
-		if (opt_fullscreen)
-			ImGui::PopStyleVar(2);
+			if (opt_fullscreen)
+				ImGui::PopStyleVar(2);
 
-		// DockSpace
-		ImGuiIO& io = ImGui::GetIO();
-		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
-		{
-			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
-		}
-
-		if (ImGui::BeginMenuBar())
-		{
-			if (ImGui::BeginMenu("File"))
+			// DockSpace
+			ImGuiIO& io = ImGui::GetIO();
+			if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
 			{
-				// Disabling fullscreen would allow the window to be moved to the front of other windows, 
-				// which we can't undo at the moment without finer window depth/z control.
-				//ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);
-
-				if (ImGui::MenuItem("Exit")) Engine::Application::Get().Close();
-				ImGui::EndMenu();
+				ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+				ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 			}
-			ImGui::EndMenuBar();
-		}
 
-		ImGui::Begin("Settings");
+			if (ImGui::BeginMenuBar())
+			{
+				if (ImGui::BeginMenu("File"))
+				{
+					// Disabling fullscreen would allow the window to be moved to the front of other windows, 
+					// which we can't undo at the moment without finer window depth/z control.
+					//ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);
 
-		auto stats = Engine::Renderer2D::GetStats();
-		ImGui::Text("Renderer2D Stats:");
-		ImGui::Text("Draw Calls: %d", stats.DrawCalls);
-		ImGui::Text("Quads: %d", stats.QuadCount);
-		ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
-		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
+					if (ImGui::MenuItem("Exit")) Engine::Application::Get().Close();
+					ImGui::EndMenu();
+				}
+				ImGui::EndMenuBar();
+			}
 
-		uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
-		ImGui::Image((void*)textureID, ImVec2{ 1280, 720.0f }, ImVec2{ 0, 1 }, ImVec2{1, 0});
-		ImGui::End();
+			ImGui::Begin("Settings");
+				auto stats = Engine::Renderer2D::GetStats();
+				ImGui::Text("Renderer2D Stats:");
+				ImGui::Text("Draw Calls: %d", stats.DrawCalls);
+				ImGui::Text("Quads: %d", stats.QuadCount);
+				ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
+				ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
+			ImGui::End();
+
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0.0f, 0.0f });
+			ImGui::Begin("Viewport");
+			ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+			if (m_ViewportSize != *((glm::vec2*) & viewportPanelSize))
+			{
+				m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+				m_Framebuffer->Resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
+
+				m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
+			}
+			uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
+			ImGui::Image((void*)textureID, ImVec2{ viewportPanelSize.x, viewportPanelSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+			ImGui::End();
+			ImGui::PopStyleVar();
 
 		ImGui::End();
 	}
