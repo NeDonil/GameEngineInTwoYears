@@ -17,16 +17,23 @@ namespace Engine
 	ImGuiLayer::ImGuiLayer():
 		Layer("ImGuiLayer")
 	{
-
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 	}
 
 	ImGuiLayer::~ImGuiLayer()
 	{
-
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 	}
 
 	void ImGuiLayer::OnAttach()
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 
@@ -54,6 +61,9 @@ namespace Engine
 
 	void ImGuiLayer::OnDetach()
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
@@ -61,6 +71,9 @@ namespace Engine
 
 	void ImGuiLayer::Begin()
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
@@ -68,6 +81,9 @@ namespace Engine
 
 	void ImGuiLayer::End()
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		ImGuiIO& io = ImGui::GetIO();
 		Application& app = Application::Get();
 		io.DisplaySize = ImVec2(app.GetWindow().GetWidth(), app.GetWindow().GetHeight());
@@ -87,6 +103,9 @@ namespace Engine
 
 	void ImGuiLayer::OnImGuiRender()
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		static bool show = true;
 		//ImGui::ShowDemoWindow(&show);
 	}

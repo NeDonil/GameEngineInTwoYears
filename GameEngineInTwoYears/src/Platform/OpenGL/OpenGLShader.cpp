@@ -9,6 +9,9 @@ namespace Engine
 
 	static GLenum ShaderTypeFromString(const std::string& type)
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		if (type == "vertex")
 			return GL_VERTEX_SHADER;
 		if (type == "fragment" || type == "pixel")
@@ -20,6 +23,9 @@ namespace Engine
 
 	OpenGLShader::OpenGLShader(const std::string& filepath)
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		std::string source = ReadFile(filepath);
 		auto shaderSources = PreProcess(source);
 		Compile(shaderSources);
@@ -35,6 +41,9 @@ namespace Engine
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc):
 		m_Name(name)
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		std::unordered_map<GLenum, std::string> shaderSources;
 		shaderSources[GL_VERTEX_SHADER] = vertexSrc;
 		shaderSources[GL_FRAGMENT_SHADER] = fragmentSrc;
@@ -43,99 +52,153 @@ namespace Engine
 
 	OpenGLShader::~OpenGLShader()
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		glDeleteProgram(m_RendererID);
 	}
 
 	void OpenGLShader::Bind() const
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		glUseProgram(m_RendererID);
 	}
 
 	void OpenGLShader::Unbind() const
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		glUseProgram(0);
 	}
 
 	void OpenGLShader::SetInt(const std::string& name, int value)
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		UploadUniformInt(name, value);
 	}
 
 	void OpenGLShader::SetIntArray(const std::string& name, int* values, uint32_t count)
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		UploadUniformIntArray(name, values, count);
 	}
 
 	void OpenGLShader::SetMat4(const std::string& name, const glm::mat4& value)
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		UploadUniformMat4(name, value);
 	}
 
 	void OpenGLShader::SetFloat(const std::string& name, float value)
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		UploadUniformFloat(name, value);
 	}
 
 	void OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& value)
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		UploadUniformFloat3(name, value);
 	}
 
 	void OpenGLShader::SetFloat4(const std::string& name, const glm::vec4& value)
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		UploadUniformFloat4(name, value);
 	}
 
 	void OpenGLShader::UploadUniformInt(const std::string& name, int value)
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 		glUniform1i(location, value);
 	}
 
 	void OpenGLShader::UploadUniformIntArray(const std::string& name, int* values, uint32_t count)
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 		glUniform1iv(location, count, values);
 	}
 
 	void OpenGLShader::UploadUniformFloat(const std::string& name, float value)
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 		glUniform1f(location, value);
 	}
 
 	void OpenGLShader::UploadUniformFloat2(const std::string& name, const glm::vec2& value)
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 		glUniform2fv(location, 1, glm::value_ptr(value));
 	}
 
 	void OpenGLShader::UploadUniformFloat3(const std::string& name, const glm::vec3& value)
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 		glUniform3fv(location, 1, glm::value_ptr(value));
 	}
 
 	void OpenGLShader::UploadUniformFloat4(const std::string& name, const glm::vec4& value)
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 		glUniform4fv(location, 1, glm::value_ptr(value));
 	}
 
 	void OpenGLShader::UploadUniformMat3(const std::string& name, const glm::mat3& matrix)
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 		glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 	}
 
 	void OpenGLShader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix)
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 	}
 
 	std::string OpenGLShader::ReadFile(const std::string& filepath)
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		std::string result;
 		std::ifstream in(filepath, std::ios::in | std::ios::binary);
 		if (in)
@@ -155,6 +218,9 @@ namespace Engine
 
 	std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& source)
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		std::unordered_map<GLenum, std::string> shaderSources;
 
 		const char* typeToken = "#type";
@@ -178,6 +244,9 @@ namespace Engine
 
 	void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shaderSources)
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		m_RendererID = glCreateProgram();
 		int status;
 		char infolog[512];

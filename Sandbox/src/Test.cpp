@@ -8,6 +8,9 @@ Test::Test()
 
 void Test::OnAttach()
 {
+#ifdef ENABLE_PROFILING
+	ENGINE_PROFILE_FUNCTION();
+#endif
 	Engine::RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
 	m_TankTexture = Engine::Texture2D::Create("assets/textures/tank2.png");
 	m_BulletTexture = Engine::Texture2D::Create("assets/textures/bullet.png");
@@ -18,11 +21,16 @@ void Test::OnAttach()
 
 void Test::OnDetach()
 {
-
+#ifdef ENABLE_PROFILING
+	ENGINE_PROFILE_FUNCTION();
+#endif
 }
 
 void Test::OnUpdate(Engine::Timestep ts)
 {
+#ifdef ENABLE_PROFILING
+	ENGINE_PROFILE_FUNCTION();
+#endif
 	m_CameraController.OnUpdate(ts);
 
 	Clear();
@@ -32,11 +40,17 @@ void Test::OnUpdate(Engine::Timestep ts)
 
 void Test::OnEvent(Engine::Event& event)
 {
+#ifdef ENABLE_PROFILING
+	ENGINE_PROFILE_FUNCTION();
+#endif
 	m_CameraController.OnEvent(event);
 }
 
 void Test::OnImGuiRender()
 {
+#ifdef ENABLE_PROFILING
+	ENGINE_PROFILE_FUNCTION();
+#endif
 	ImGui::Text("Bullet Direction: (%f, %f)", m_Bullet.Direction.x, m_Bullet.Direction.y);
 	ImGui::Text("Bullet Life: %f", m_Bullet.Life);
 	ImGui::Text("Bullet Position: (%f, %f)", m_Bullet.Position.x, m_Bullet.Position.y);
@@ -48,6 +62,9 @@ void Test::OnImGuiRender()
 
 void Test::Render()
 {
+#ifdef ENABLE_PROFILING
+	ENGINE_PROFILE_FUNCTION();
+#endif
 	Engine::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
 	Engine::Renderer2D::DrawQuad({ -50.0f, -50.0f, 0.1f }, { 100.0f, 100.0f }, m_CheckerboardTexture, 40.0f);
@@ -68,6 +85,9 @@ void Test::Render()
 
 void Test::Logic(Engine::Timestep ts)
 {
+#ifdef ENABLE_PROFILING
+	ENGINE_PROFILE_FUNCTION();
+#endif
 	if (Engine::Input::IsKeyPressed(ENGINE_KEY_UP))
 	{
 		m_TankPosition.y += 0.2f * ts;
@@ -181,10 +201,16 @@ void Test::Logic(Engine::Timestep ts)
 
 void Test::Clear()
 {
+#ifdef ENABLE_PROFILING
+	ENGINE_PROFILE_FUNCTION();
+#endif
 	Engine::RenderCommand::Clear();
 }
 
 bool Test::ChechCollision(float x1, float y1, float w1, float h1, float x2, float y2, float w2, float h2)
 {
+#ifdef ENABLE_PROFILING
+	ENGINE_PROFILE_FUNCTION();
+#endif
 	return (((x1 + w1) > (x2)) || ((x2 + w2) > x1) || ((y1 + h1) > (y2)) || ((y2 + h2) > y1));
 }

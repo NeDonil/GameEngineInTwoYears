@@ -8,9 +8,15 @@ namespace Engine
 	OrthographicCameraController::OrthographicCameraController(float aspectRatio, bool rotation):
 		m_AspectRatio(aspectRatio), m_Camera(-aspectRatio * m_ZoomLevel, aspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel), m_Rotation(rotation)
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 	}
 	void OrthographicCameraController::OnUpdate(Timestep ts)
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		if (Input::IsKeyPressed(ENGINE_KEY_W))
 			m_CameraPosition.y += m_CameraTranslationSpeed * (float)ts;
 		else if (Input::IsKeyPressed(ENGINE_KEY_S))
@@ -35,6 +41,9 @@ namespace Engine
 
 	bool OrthographicCameraController::OnEvent(Event& e)
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<MouseScrolledEvent>(ENGINE_BIND_EVENT_FN(OrthographicCameraController::OnMouseScrolled));
 		dispatcher.Dispatch<WindowResizeEvent>(ENGINE_BIND_EVENT_FN(OrthographicCameraController::OnWindowResized));
@@ -44,6 +53,9 @@ namespace Engine
 
 	void OrthographicCameraController::OnResize(float width, float height)
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		m_AspectRatio = width / height;
 		m_Bounds = { -m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel };
 		m_Camera.SetProjection(m_Bounds.Left, m_Bounds.Right, m_Bounds.Bottom, m_Bounds.Top);
@@ -51,6 +63,9 @@ namespace Engine
 
 	bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e)
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		m_ZoomLevel -= e.GetYOffset() * 0.25;
 		m_ZoomLevel = std::max(m_ZoomLevel, 0.25f);
 		m_Bounds = { -m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel };
@@ -59,6 +74,9 @@ namespace Engine
 	}
 	bool OrthographicCameraController::OnWindowResized(WindowResizeEvent& e)
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		OnResize((float)e.GetWidth(), (float)e.GetHeight());
 		return false;
 	}

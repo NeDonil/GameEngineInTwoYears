@@ -9,6 +9,9 @@ namespace Engine
 
 	void Log::Init()
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		spdlog::set_pattern("%^[%T] %n: %v%$");
 
 		s_CoreLogger = spdlog::stdout_color_mt("Engine");

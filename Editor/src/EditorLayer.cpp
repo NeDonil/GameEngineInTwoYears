@@ -2,16 +2,21 @@
 #include "EditorLayer.h"
 #include "Engine/Core/EntryPoint.h"
 
+#define ENABLE_PROFILING
+
 EditorLayer::EditorLayer():
 	Layer("Layer2D"), m_CameraController((float)1280 / 720, true)
 {
+#ifdef ENABLE_PROFILING
 	ENGINE_PROFILE_FUNCTION();
+#endif
 }
 
 void EditorLayer::OnAttach()
 {
+#ifdef ENABLE_PROFILING
 	ENGINE_PROFILE_FUNCTION();
-	
+#endif
 	m_CheckerboardTexture = Engine::Texture2D::Create("assets/textures/clown.png");
 
 	Engine::FramebufferSpecification fbSpec;
@@ -25,12 +30,16 @@ void EditorLayer::OnAttach()
 
 void EditorLayer::OnDetach()
 {
+#ifdef ENABLE_PROFILING
 	ENGINE_PROFILE_FUNCTION();
+#endif
 }
 
 void EditorLayer::OnUpdate(Engine::Timestep ts)
 {
+#ifdef ENABLE_PROFILING
 	ENGINE_PROFILE_FUNCTION();
+#endif
 
 	{
 		ENGINE_PROFILE_SCOPE("EditorLayer::OnUpdate");
@@ -63,9 +72,10 @@ void EditorLayer::OnUpdate(Engine::Timestep ts)
 
 void EditorLayer::OnImGuiRender()
 {
+#ifdef ENABLE_PROFILING
 	ENGINE_PROFILE_FUNCTION();
-	
-	// Note: Switch this to true to enable dockspace
+#endif
+
 	static bool dockingEnabled = true;
 	if (dockingEnabled)
 	{
@@ -74,8 +84,6 @@ void EditorLayer::OnImGuiRender()
 		bool opt_fullscreen = opt_fullscreen_persistant;
 		static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
-		// We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
-		// because it would be confusing to have two docking targets within each others.
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
 		if (opt_fullscreen)
 		{
@@ -89,15 +97,9 @@ void EditorLayer::OnImGuiRender()
 			window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 		}
 
-		// When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background and handle the pass-thru hole, so we ask Begin() to not render a background.
 		if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
 			window_flags |= ImGuiWindowFlags_NoBackground;
 
-		// Important: note that we proceed even if Begin() returns false (aka window is collapsed).
-		// This is because we want to keep our DockSpace() active. If a DockSpace() is inactive, 
-		// all active windows docked into it will lose their parent and become undocked.
-		// We cannot preserve the docking relationship between an active window and an inactive docking, otherwise 
-		// any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 
 		ImGui::Begin("DockSpace Demo", &dockspaceOpen, window_flags);
@@ -106,7 +108,6 @@ void EditorLayer::OnImGuiRender()
 			if (opt_fullscreen)
 				ImGui::PopStyleVar(2);
 
-			// DockSpace
 			ImGuiIO& io = ImGui::GetIO();
 			if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
 			{
@@ -118,10 +119,6 @@ void EditorLayer::OnImGuiRender()
 			{
 				if (ImGui::BeginMenu("File"))
 				{
-					// Disabling fullscreen would allow the window to be moved to the front of other windows, 
-					// which we can't undo at the moment without finer window depth/z control.
-					//ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);
-
 					if (ImGui::MenuItem("Exit")) Engine::Application::Get().Close();
 					ImGui::EndMenu();
 				}
@@ -176,6 +173,8 @@ void EditorLayer::OnImGuiRender()
 
 void EditorLayer::OnEvent(Engine::Event& e)
 {
+#ifdef ENABLE_PROFILING
 	ENGINE_PROFILE_FUNCTION();
+#endif
 	m_CameraController.OnEvent(e);
 }

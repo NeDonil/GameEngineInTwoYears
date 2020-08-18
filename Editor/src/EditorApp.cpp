@@ -11,6 +11,9 @@ public:
 	Editor()
 		:Application("Editor")
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		PushLayer(new EditorLayer());
 	}
 
@@ -20,5 +23,8 @@ public:
 };
 Engine::Application* Engine::CreateApplication()
 {
+#ifdef ENABLE_PROFILING
+	ENGINE_PROFILE_FUNCTION();
+#endif
 	return new Editor();
 }

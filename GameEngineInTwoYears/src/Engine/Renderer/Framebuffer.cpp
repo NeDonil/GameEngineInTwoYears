@@ -5,6 +5,9 @@ namespace Engine
 {
 	Ref<Framebuffer> Framebuffer::Create(const FramebufferSpecification& spec)
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		switch (Renderer::GetAPI())
 		{
 			case RendererAPI::API::None: ENGINE_CORE_ASSERT(false, "RendererAPI:None is not supported now"); return nullptr;

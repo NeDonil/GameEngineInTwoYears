@@ -5,12 +5,16 @@
 Sandbox2D::Sandbox2D():
 	Layer("Layer2D"), m_CameraController((float)1280 / 720, true)
 {
+#ifdef ENABLE_PROFILING
 	ENGINE_PROFILE_FUNCTION();
+#endif
 }
 
 void Sandbox2D::OnAttach()
 {
+#ifdef ENABLE_PROFILING
 	ENGINE_PROFILE_FUNCTION();
+#endif
 	
 	m_CheckerboardTexture = Engine::Texture2D::Create("assets/textures/clown.png");
 
@@ -18,12 +22,16 @@ void Sandbox2D::OnAttach()
 
 void Sandbox2D::OnDetach()
 {
+#ifdef ENABLE_PROFILING
 	ENGINE_PROFILE_FUNCTION();
+#endif
 }
 
 void Sandbox2D::OnUpdate(Engine::Timestep ts)
 {
+#ifdef ENABLE_PROFILING
 	ENGINE_PROFILE_FUNCTION();
+#endif
 
 	{
 		ENGINE_PROFILE_SCOPE("Sandbox2D::OnUpdate");
@@ -53,7 +61,9 @@ void Sandbox2D::OnUpdate(Engine::Timestep ts)
 
 void Sandbox2D::OnImGuiRender()
 {
+#ifdef ENABLE_PROFILING
 	ENGINE_PROFILE_FUNCTION();
+#endif
 	
 	
 	ImGui::Begin("Settings");
@@ -73,6 +83,8 @@ void Sandbox2D::OnImGuiRender()
 
 void Sandbox2D::OnEvent(Engine::Event& e)
 {
+#ifdef ENABLE_PROFILING
 	ENGINE_PROFILE_FUNCTION();
+#endif
 	m_CameraController.OnEvent(e);
 }

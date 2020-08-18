@@ -14,4 +14,4 @@ bin-int
 **.json
 
 #ImGui files
-Sandbox/imgui.ini
+**.ini

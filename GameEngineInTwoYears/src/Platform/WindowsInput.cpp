@@ -10,12 +10,18 @@ namespace Engine
 
 	bool WindowsInput::IsKeyPressedImpl(int keycode)
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		auto state = glfwGetKey(window, keycode);
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
 	bool WindowsInput::IsMouseButtonPressedImpl(int button)
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		auto state = glfwGetMouseButton(window, button);
 		return state == GLFW_PRESS;
@@ -23,6 +29,9 @@ namespace Engine
 
 	std::pair<float, float> WindowsInput::GetMousePositionImpl()
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		double xpos, ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
@@ -31,12 +40,18 @@ namespace Engine
 
 	float WindowsInput::GetMouseXImpl()
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		auto [x, y] = GetMousePositionImpl();
 		return x;
 	}
 
 	float WindowsInput::GetMouseYImpl()
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		auto [x, y] = GetMousePositionImpl();
 		return y;
 	}

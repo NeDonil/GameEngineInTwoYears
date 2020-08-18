@@ -8,6 +8,9 @@ namespace Engine {
 
 	Ref<Texture2D> Texture2D::Create(uint32_t width, uint32_t height)
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		switch (Renderer::GetAPI())
 		{
 			case RendererAPI::API::None:    ENGINE_CORE_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
@@ -20,6 +23,9 @@ namespace Engine {
 
 	Ref<Texture2D> Texture2D::Create(const std::string& path)
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		switch (Renderer::GetAPI())
 		{
 			case RendererAPI::API::None:    ENGINE_CORE_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
@@ -29,5 +35,4 @@ namespace Engine {
 		ENGINE_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
 	}
-
 }

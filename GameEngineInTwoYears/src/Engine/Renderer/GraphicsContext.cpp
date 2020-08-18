@@ -8,6 +8,9 @@ namespace Engine
 {
 	Scope<GraphicsContext> GraphicsContext::Create(void* window)
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		switch (Renderer::GetAPI())
 		{
 			case RendererAPI::API::None: ENGINE_CORE_ASSERT(false, "RendererAPI::None is not supported"); return nullptr;

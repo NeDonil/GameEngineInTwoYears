@@ -11,14 +11,23 @@ public:
 	Sandbox()
 		: Application("Sandbox")
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 		PushLayer(new Sandbox2D());
 	}
 
 	~Sandbox()
 	{
+#ifdef ENABLE_PROFILING
+		ENGINE_PROFILE_FUNCTION();
+#endif
 	}
 };
 Engine::Application* Engine::CreateApplication()
 {
+#ifdef ENABLE_PROFILING
+	ENGINE_PROFILE_FUNCTION();
+#endif
 	return new Sandbox();
 }
