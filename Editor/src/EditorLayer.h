@@ -18,6 +18,7 @@ private:
 	Engine::Ref<Engine::Framebuffer> m_Framebuffer;
 	Engine::Ref<Engine::Texture2D> m_CheckerboardTexture;
 
+	bool m_ViewportFocused = false, m_ViewportHovered = false;
 	glm::vec2 m_ViewportSize;
 	glm::vec4 m_SquareColor = { 0.8f, 0.3f, 0.2f, 1.0f};
 

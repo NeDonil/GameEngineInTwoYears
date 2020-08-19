@@ -1,8 +1,7 @@
 #include <chrono>
 #include "EditorLayer.h"
 #include "Engine/Core/EntryPoint.h"
-
-#define ENABLE_PROFILING
+#include "Engine/Core/Application.h"
 
 EditorLayer::EditorLayer():
 	Layer("Layer2D"), m_CameraController((float)1280 / 720, true)
@@ -43,7 +42,9 @@ void EditorLayer::OnUpdate(Engine::Timestep ts)
 
 	{
 		ENGINE_PROFILE_SCOPE("EditorLayer::OnUpdate");
-		m_CameraController.OnUpdate(ts);
+
+		if (m_ViewportFocused)
+			m_CameraController.OnUpdate(ts);
 	}
 
 	Engine::Renderer2D::ResetStats();
@@ -136,6 +137,11 @@ void EditorLayer::OnImGuiRender()
 
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0.0f, 0.0f });
 			ImGui::Begin("Viewport");
+
+			m_ViewportFocused = ImGui::IsWindowFocused();
+			m_ViewportHovered = ImGui::IsWindowHovered();
+			Engine::Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused || !m_ViewportHovered);
+
 			ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 			if (m_ViewportSize != *((glm::vec2*) & viewportPanelSize))
 			{

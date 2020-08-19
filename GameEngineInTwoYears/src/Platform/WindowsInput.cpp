@@ -1,58 +1,43 @@
-#include <enpch.h>
-#include "WindowsInput.h"
+#include "enpch.h"
+#include "Engine/Core/Input.h"
 
-#include <GLFW/glfw3.h>
-#include <Engine/Core/Application.h>
+#include "Engine/Core/Application.h"
+#include "GLFW/glfw3.h"
 
 namespace Engine
 {
-	Input* Input::s_Instance = new WindowsInput();
-
-	bool WindowsInput::IsKeyPressedImpl(int keycode)
+	bool Input::IsKeyPressed(int key)
 	{
-#ifdef ENABLE_PROFILING
-		ENGINE_PROFILE_FUNCTION();
-#endif
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
-		auto state = glfwGetKey(window, keycode);
+		auto state = glfwGetKey(window, key);
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
-	bool WindowsInput::IsMouseButtonPressedImpl(int button)
+
+	bool Input::IsMouseButtonPressed(int button)
 	{
-#ifdef ENABLE_PROFILING
-		ENGINE_PROFILE_FUNCTION();
-#endif
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		auto state = glfwGetMouseButton(window, button);
-		return state == GLFW_PRESS;
+		return button == GLFW_PRESS;
 	}
 
-	std::pair<float, float> WindowsInput::GetMousePositionImpl()
+	std::pair<float, float> Input::GetMousePosition()
 	{
-#ifdef ENABLE_PROFILING
-		ENGINE_PROFILE_FUNCTION();
-#endif
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		double xpos, ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
+
 		return { (float)xpos, (float)ypos };
 	}
 
-	float WindowsInput::GetMouseXImpl()
+	float Input::GetMouseX()
 	{
-#ifdef ENABLE_PROFILING
-		ENGINE_PROFILE_FUNCTION();
-#endif
-		auto [x, y] = GetMousePositionImpl();
+		auto [x, y] = GetMousePosition();
 		return x;
 	}
 
-	float WindowsInput::GetMouseYImpl()
+	float Input::GetMouseY()
 	{
-#ifdef ENABLE_PROFILING
-		ENGINE_PROFILE_FUNCTION();
-#endif
-		auto [x, y] = GetMousePositionImpl();
+		auto [x, y] = GetMousePosition();
 		return y;
 	}
 }
