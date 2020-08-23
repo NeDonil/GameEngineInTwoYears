@@ -5,20 +5,16 @@
 
 namespace Engine
 {
+	static const uint32_t s_MaxFramebufferSize = 8192;
+
 	OpenGLFramebuffer::OpenGLFramebuffer(const FramebufferSpecification& spec)
 		: m_Specification(spec)
 	{
-#ifdef ENABLE_PROFILING
-		ENGINE_PROFILE_FUNCTION();
-#endif
 		Invalidate();
 	}
 
 	OpenGLFramebuffer::~OpenGLFramebuffer()
 	{
-#ifdef ENABLE_PROFILING
-		ENGINE_PROFILE_FUNCTION();
-#endif
 		glDeleteFramebuffers(1, &m_RendererID);
 		glDeleteTextures(1, &m_ColorAttachment);
 		glDeleteTextures(1, &m_DepthAttachment);
@@ -26,9 +22,6 @@ namespace Engine
 
 	void OpenGLFramebuffer::Invalidate()
 	{
-#ifdef ENABLE_PROFILING
-		ENGINE_PROFILE_FUNCTION();
-#endif
 		if (m_RendererID)
 		{
 			glDeleteFramebuffers(1, &m_RendererID);
@@ -60,26 +53,23 @@ namespace Engine
 
 	void OpenGLFramebuffer::Bind()
 	{
-#ifdef ENABLE_PROFILING
-		ENGINE_PROFILE_FUNCTION();
-#endif
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
 		glViewport(0, 0, m_Specification.Width, m_Specification.Height);
 	}
 
 	void OpenGLFramebuffer::Unbind()
 	{
-#ifdef ENABLE_PROFILING
-		ENGINE_PROFILE_FUNCTION();
-#endif
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
 	void OpenGLFramebuffer::Resize(uint32_t width, uint32_t height)
 	{
-#ifdef ENABLE_PROFILING
-		ENGINE_PROFILE_FUNCTION();
-#endif
+		if (width == 0 || height == 0 || width > s_MaxFramebufferSize || height > s_MaxFramebufferSize)
+		{
+			ENGINE_CORE_WARN("Attempted to resize framebuffer to {0}x{1}", width, height);
+			return;
+		}
+
 		m_Specification.Width = width;
 		m_Specification.Height = height;
 		Invalidate();

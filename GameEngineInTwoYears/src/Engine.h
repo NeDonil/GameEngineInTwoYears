@@ -11,6 +11,9 @@
 
 #include "Engine/Core/Random.h"
 
+#include "Engine/Scene/Scene.h"
+#include "Engine/Scene/Components.h"
+
 //---------Renderer--------------------------------
 #include "Engine/Renderer/Renderer.h"
 #include "Engine/Renderer/RenderCommand.h"
@@ -33,6 +36,3 @@
 //-------------------------------------------------
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
-//---------OpenGL----------------------------------
-#include "Platform/OpenGL/OpenGLShader.h"

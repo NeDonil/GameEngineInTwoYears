@@ -7,9 +7,6 @@ namespace Engine
 {
 	Ref<VertexArray> VertexArray::Create()
 	{
-#ifdef ENABLE_PROFILING
-		ENGINE_PROFILE_FUNCTION();
-#endif
 		switch (Renderer::GetAPI())
 		{
 			case RendererAPI::API::None:  ENGINE_CORE_ASSERT(false, "RendererApi::None is currently not supported!"); return nullptr;

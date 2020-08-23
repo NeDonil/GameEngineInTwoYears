@@ -7,9 +7,6 @@ namespace Engine
 {
 	Ref<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size)
 	{
-#ifdef ENABLE_PROFILING
-		ENGINE_PROFILE_FUNCTION();
-#endif
 		switch (Renderer::GetAPI())
 		{
 			case RendererAPI::API::None: ENGINE_CORE_ASSERT(false, "RendererAPI:None is not supported now"); return nullptr;
@@ -22,9 +19,6 @@ namespace Engine
 
 	Ref<VertexBuffer> VertexBuffer::Create(uint32_t size)
 	{
-#ifdef ENABLE_PROFILING
-		ENGINE_PROFILE_FUNCTION();
-#endif
 		switch (Renderer::GetAPI())
 		{
 			case RendererAPI::API::None: ENGINE_CORE_ASSERT(false, "RendererAPI:None is not supported now"); return nullptr;
@@ -37,9 +31,6 @@ namespace Engine
 
 	Ref<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t count)
 	{
-#ifdef ENABLE_PROFILING
-		ENGINE_PROFILE_FUNCTION();
-#endif
 		switch (Renderer::GetAPI())
 		{
 			case RendererAPI::API::None: ENGINE_CORE_ASSERT(false, "RendererAPI:None is not supported now"); return nullptr;

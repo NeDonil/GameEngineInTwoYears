@@ -11,17 +11,11 @@ namespace Engine
 {
 	ParticleSystem::ParticleSystem()
 	{
-#ifdef ENABLE_PROFILING
-		ENGINE_PROFILE_FUNCTION();
-#endif
 		m_ParticlePool.resize(1000);
 	}
 
 	void ParticleSystem::OnUpdate(Timestep ts)
 	{
-#ifdef ENABLE_PROFILING
-		ENGINE_PROFILE_FUNCTION();
-#endif
 		for (auto& particle : m_ParticlePool)
 		{
 			if (!particle.Active)
@@ -41,9 +35,6 @@ namespace Engine
 
 	void ParticleSystem::OnRender(OrthographicCamera& camera)
 	{
-#ifdef ENABLE_PROFILING
-		ENGINE_PROFILE_FUNCTION();
-#endif
 		Engine::Renderer2D::BeginScene(camera);
 
 		for (auto& particle : m_ParticlePool)
@@ -64,9 +55,6 @@ namespace Engine
 
 	void ParticleSystem::Emit(const ParticleProps& particleProps)
 	{
-#ifdef ENABLE_PROFILING
-		ENGINE_PROFILE_FUNCTION();
-#endif
 		Particle& particle = m_ParticlePool[m_PoolIndex];
 		particle.Active = true;
 		particle.Position = particleProps.Position;

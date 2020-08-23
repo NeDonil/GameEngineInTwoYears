@@ -19,9 +19,6 @@ namespace Engine
 
 	Application::Application(const char* name)
 	{
-#ifdef ENABLE_PROFILING
-		ENGINE_PROFILE_FUNCTION();
-#endif
 		ENGINE_CORE_ASSERT(!s_Instance, "Applicaiton is already exists");
 		s_Instance = this;
 
@@ -36,25 +33,16 @@ namespace Engine
 
 	Application::~Application()
 	{
-#ifdef ENABLE_PROFILING
-		ENGINE_PROFILE_FUNCTION();
-#endif
 	}
 
 	void Application::PushLayer(Layer* layer)
 	{
-#ifdef ENABLE_PROFILING
-		ENGINE_PROFILE_FUNCTION();
-#endif
 		m_LayerStack.PushLayer(layer);
 		layer->OnAttach();
 	}
 
 	void Application::PushOverlay(Layer* overlay)
 	{
-#ifdef ENABLE_PROFILING
-		ENGINE_PROFILE_FUNCTION();
-#endif
 		m_LayerStack.PushOverlay(overlay);
 		overlay->OnAttach();
 	}
@@ -62,16 +50,10 @@ namespace Engine
 
 	void Application::Close()
 	{
-#ifdef ENABLE_PROFILING
-		ENGINE_PROFILE_FUNCTION();
-#endif
 		m_Running = false;
 	}
 	void Application::OnEvent(Event& e)
 	{
-#ifdef ENABLE_PROFILING
-		ENGINE_PROFILE_FUNCTION();
-#endif
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
 		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(OnWindowResize));
@@ -86,9 +68,6 @@ namespace Engine
 
 	void Application::Run()
 	{
-#ifdef ENABLE_PROFILING
-		ENGINE_PROFILE_FUNCTION();
-#endif
 		while (m_Running)
 		{
 			float time = (float)glfwGetTime();
@@ -112,18 +91,12 @@ namespace Engine
 
 	bool Application::OnWindowClose(WindowCloseEvent& e)
 	{
-#ifdef ENABLE_PROFILING
-		ENGINE_PROFILE_FUNCTION();
-#endif
 		m_Running = false;
 		return true;
 	}
 
 	bool Application::OnWindowResize(WindowResizeEvent& e)
 	{
-#ifdef ENABLE_PROFILING
-		ENGINE_PROFILE_FUNCTION();
-#endif
 		if (e.GetWidth() == 0 || e.GetHeight() == 0)
 		{
 			m_Minimized = true;

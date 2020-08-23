@@ -16,6 +16,7 @@ IncludeDir["Glad"] = "GameEngineInTwoYears/vendor/GLAD/include"
 IncludeDir["ImGui"] = "GameEngineInTwoYears/vendor/ImGui/"
 IncludeDir["glm"] = "GameEngineInTwoYears/vendor/glm/"
 IncludeDir["stb_image"] = "GameEngineInTwoYears/vendor/stb_image/"
+IncludeDir["entt"] = "GameEngineInTwoYears/vendor/entt/include/"
 
 include "GameEngineInTwoYears/vendor/GLFW"
 include "GameEngineInTwoYears/vendor/Glad"
@@ -53,7 +54,8 @@ project "GameEngineInTwoYears"
 			"%{IncludeDir.GLFW}",
 			"%{IncludeDir.Glad}",
 			"%{IncludeDir.ImGui}",
-			"%{IncludeDir.stb_image}"
+			"%{IncludeDir.stb_image}",
+			"%{IncludeDir.entt}"
 	
 		}
 	
@@ -158,7 +160,8 @@ project "Editor"
 		"GameEngineInTwoYears/vendor/glm",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
-		"GameEngineInTwoYears/src"
+		"GameEngineInTwoYears/src",
+		"%{IncludeDir.entt}"
 	}
 
 	links

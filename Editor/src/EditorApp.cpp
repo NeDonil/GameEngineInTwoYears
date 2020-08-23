@@ -5,26 +5,25 @@
 #include "Engine/ImGui/ImGuiLayer.h"
 #include "EditorLayer.h"
 
-class Editor : public Engine::Application
+namespace Engine
 {
-public:
-	Editor()
-		:Application("Editor")
+
+	class Editor : public Engine::Application
 	{
-#ifdef ENABLE_PROFILING
-		ENGINE_PROFILE_FUNCTION();
-#endif
-		PushLayer(new EditorLayer());
+	public:
+		Editor()
+			:Application("Editor")
+		{
+			PushLayer(new EditorLayer());
+		}
+
+		~Editor()
+		{
+		}
+	};
+	Engine::Application* Engine::CreateApplication()
+	{
+		return new Editor();
 	}
 
-	~Editor()
-	{
-	}
-};
-Engine::Application* Engine::CreateApplication()
-{
-#ifdef ENABLE_PROFILING
-	ENGINE_PROFILE_FUNCTION();
-#endif
-	return new Editor();
 }
