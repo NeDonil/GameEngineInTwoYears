@@ -5,16 +5,10 @@
 Sandbox2D::Sandbox2D():
 	Layer("Layer2D"), m_CameraController((float)1280 / 720, true)
 {
-
-	
-#endif
 }
 
 void Sandbox2D::OnAttach()
 {
-
-	
-#endif
 	
 	m_CheckerboardTexture = Engine::Texture2D::Create("assets/textures/clown.png");
 
@@ -22,17 +16,10 @@ void Sandbox2D::OnAttach()
 
 void Sandbox2D::OnDetach()
 {
-
-	
-#endif
 }
 
 void Sandbox2D::OnUpdate(Engine::Timestep ts)
 {
-
-	
-#endif
-
 	{
 		ENGINE_PROFILE_SCOPE("Sandbox2D::OnUpdate");
 		m_CameraController.OnUpdate(ts);
@@ -60,12 +47,7 @@ void Sandbox2D::OnUpdate(Engine::Timestep ts)
 }
 
 void Sandbox2D::OnImGuiRender()
-{
-
-	
-#endif
-	
-	
+{	
 	ImGui::Begin("Settings");
 
 	auto stats = Engine::Renderer2D::GetStats();
@@ -83,8 +65,5 @@ void Sandbox2D::OnImGuiRender()
 
 void Sandbox2D::OnEvent(Engine::Event& e)
 {
-
-	
-#endif
 	m_CameraController.OnEvent(e);
 }
