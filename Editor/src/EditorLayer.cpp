@@ -10,7 +10,7 @@ float frameTime = 0.0f;
 namespace Engine
 {
 	EditorLayer::EditorLayer() :
-		Layer("Layer2D"), m_CameraController((float)1280 / 720, true)
+		Layer("Layer2D")
 	{
 	}
 
@@ -29,7 +29,13 @@ namespace Engine
 
 		m_SquareEntity = m_ActiveScene->CreateEntity("Orange Square");
 		m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4( 8.0f, 0.5f, 0.2f, 1.0f ));
-		m_SquareEntity.GetComponent<TransformComponent>().Transform = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+
+		m_CameraEntity = m_ActiveScene->CreateEntity("Camera Entity");
+		m_CameraEntity.AddComponent<CameraComponent>(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f));
+
+		m_SecondCamera = m_ActiveScene->CreateEntity("Second Camera");
+		auto& cc = m_SecondCamera.AddComponent<CameraComponent>(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f));
+		cc.Primary = false;
 
 		RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
 	}
@@ -41,21 +47,15 @@ namespace Engine
 	void EditorLayer::OnUpdate(Timestep ts)
 	{
 		ENGINE_PROFILE_SCOPE("EditorLayer::OnUpdate");
-
-		if (m_ViewportFocused)
-			m_CameraController.OnUpdate(ts);
 		
 
 		Renderer2D::ResetStats();
 		m_Framebuffer->Bind();
 		
 		RenderCommand::Clear();
-	
-		Renderer2D::BeginScene(m_CameraController.GetCamera());
 
 		m_ActiveScene->OnUpdate(ts);
 
-		Renderer2D::EndScene();
 		m_Framebuffer->Unbind();
 
 		frameTime = (float)ts;
@@ -130,6 +130,17 @@ namespace Engine
 
 				ImGui::Separator();
 		}
+
+		ImGui::DragFloat3("Camera Transform",
+			glm::value_ptr(m_CameraEntity.GetComponent<TransformComponent>().Transform[3]),
+			0.1f, -1.0f, 1.0f);
+
+		if (ImGui::Checkbox("Camera A", &m_PrimaryCamera))
+		{
+			m_CameraEntity.GetComponent<CameraComponent>().Primary = m_PrimaryCamera;
+			m_SecondCamera.GetComponent<CameraComponent>().Primary = !m_PrimaryCamera;
+		}
+
 		ImGui::End();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0.0f, 0.0f });
@@ -145,7 +156,7 @@ namespace Engine
 			m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 			m_Framebuffer->Resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
 
-			m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
+			//m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
 		}
 		uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
 		ImGui::Image((void*)textureID, ImVec2{ viewportPanelSize.x, viewportPanelSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
@@ -157,6 +168,6 @@ namespace Engine
 
 	void EditorLayer::OnEvent(Event& e)
 	{
-		m_CameraController.OnEvent(e);
+		//m_CameraController.OnEvent(e);
 	}
 }
