@@ -1,18 +1,21 @@
 #pragma once
 
-//For use by Applications
+//---------Core------------------------------------
 #include "Engine/Core/Application.h"
 #include "Engine/Core/Log.h"
 #include "Engine/Core/Layer.h"
-
 #include "Engine/Core/Input.h"
+
 #include "Engine/Core/KeyCodes.h"
 #include "Engine/Core/MouseButtonKeyCodes.h"
-
 #include "Engine/Core/Random.h"
 
+#include "Engine/Core/Timestep.h"
+
+//---------Scene-----------------------------------
 #include "Engine/Scene/Scene.h"
 #include "Engine/Scene/Entity.h"
+#include "Engine/Scene/ScriptableEntity.h"
 #include "Engine/Scene/Components.h"
 
 //---------Renderer--------------------------------
@@ -28,7 +31,6 @@
 #include "Engine/Renderer/Texture.h"
 #include "Engine/Renderer/VertexArray.h"
 
-#include "Engine/Core/Timestep.h"
 
 #include "Engine/Renderer/Renderer2D.h"
 #include "Engine/Renderer/OrthographicCamera.h"

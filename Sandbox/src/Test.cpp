@@ -10,7 +10,6 @@ void Test::OnAttach()
 {
 
 	
-#endif
 	Engine::RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
 	m_TankTexture = Engine::Texture2D::Create("assets/textures/tank2.png");
 	m_BulletTexture = Engine::Texture2D::Create("assets/textures/bullet.png");
@@ -23,14 +22,12 @@ void Test::OnDetach()
 {
 
 	
-#endif
 }
 
 void Test::OnUpdate(Engine::Timestep ts)
 {
 
 	
-#endif
 	m_CameraController.OnUpdate(ts);
 
 	Clear();
@@ -42,7 +39,6 @@ void Test::OnEvent(Engine::Event& event)
 {
 
 	
-#endif
 	m_CameraController.OnEvent(event);
 }
 
@@ -50,7 +46,6 @@ void Test::OnImGuiRender()
 {
 
 	
-#endif
 	ImGui::Text("Bullet Direction: (%f, %f)", m_Bullet.Direction.x, m_Bullet.Direction.y);
 	ImGui::Text("Bullet Life: %f", m_Bullet.Life);
 	ImGui::Text("Bullet Position: (%f, %f)", m_Bullet.Position.x, m_Bullet.Position.y);
@@ -64,7 +59,6 @@ void Test::Render()
 {
 
 	
-#endif
 	Engine::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
 	Engine::Renderer2D::DrawQuad({ -50.0f, -50.0f, 0.1f }, { 100.0f, 100.0f }, m_CheckerboardTexture, 40.0f);
@@ -87,7 +81,6 @@ void Test::Logic(Engine::Timestep ts)
 {
 
 	
-#endif
 	if (Engine::Input::IsKeyPressed(ENGINE_KEY_UP))
 	{
 		m_TankPosition.y += 0.2f * ts;
@@ -203,7 +196,6 @@ void Test::Clear()
 {
 
 	
-#endif
 	Engine::RenderCommand::Clear();
 }
 
@@ -211,6 +203,5 @@ bool Test::ChechCollision(float x1, float y1, float w1, float h1, float x2, floa
 {
 
 	
-#endif
 	return (((x1 + w1) > (x2)) || ((x2 + w2) > x1) || ((y1 + h1) > (y2)) || ((y2 + h2) > y1));
 }

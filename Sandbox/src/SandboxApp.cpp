@@ -13,7 +13,6 @@ public:
 	{
 
 		
-#endif
 		PushLayer(new Sandbox2D());
 	}
 
@@ -21,13 +20,11 @@ public:
 	{
 
 		
-#endif
 	}
 };
 Engine::Application* Engine::CreateApplication()
 {
 
 	
-#endif
 	return new Sandbox();
 }

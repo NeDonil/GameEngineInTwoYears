@@ -16,6 +16,8 @@ namespace Engine
 
 	void EditorLayer::OnAttach()
 	{
+		RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
+
 		m_CheckerboardTexture = Texture2D::Create("assets/textures/clown.png");
 
 		FramebufferSpecification fbSpec;
@@ -37,7 +39,37 @@ namespace Engine
 		auto& cc = m_SecondCamera.AddComponent<CameraComponent>();
 		cc.Primary = false;
 
-		RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
+		class CameraController : public ScriptableEntity
+		{
+		public:
+			void OnCreate()
+			{
+			}
+
+			void OnDestroy()
+			{
+			}
+
+			void OnUpdate(Timestep ts)
+			{
+				auto& transform = GetComponent<TransformComponent>().Transform;
+
+				float speed = 5.0f;
+
+				if (Input::IsKeyPressed(ENGINE_KEY_A))
+					transform[3][0] -= speed * ts;
+				else if (Input::IsKeyPressed(ENGINE_KEY_D))
+					transform[3][0] += speed * ts;
+
+				if (Input::IsKeyPressed(ENGINE_KEY_W))
+					transform[3][1] += speed * ts;
+				else if (Input::IsKeyPressed(ENGINE_KEY_S))
+					transform[3][1] -= speed * ts;
+			}
+		};
+
+		m_SecondCamera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+
 	}
 
 	void EditorLayer::OnDetach()
@@ -53,6 +85,7 @@ namespace Engine
 			(spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y))
 		{
 			m_Framebuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+			
 			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		}
 
@@ -158,12 +191,8 @@ namespace Engine
 		Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused || !m_ViewportHovered);
 
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-		if (m_ViewportSize != *((glm::vec2*) & viewportPanelSize) && viewportPanelSize.x > 0 && viewportPanelSize.y > 0 ) 
-		{
-			m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
-			m_Framebuffer->Resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
-			m_ActiveScene->OnViewportResize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
-		}
+		m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+
 		uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
 		ImGui::Image((void*)textureID, ImVec2{ viewportPanelSize.x, viewportPanelSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 		ImGui::End();

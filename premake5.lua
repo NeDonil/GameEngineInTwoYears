@@ -109,6 +109,7 @@ project "Sandbox"
 		"GameEngineInTwoYears/vendor/glm",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
+		"%{IncludeDir.entt}",
 		"GameEngineInTwoYears/src"
 	}
 
