@@ -28,6 +28,7 @@ namespace Engine
 		m_Framebuffer = Framebuffer::Create(fbSpec);
 
 		m_ActiveScene = CreateRef<Scene>();
+		m_Panel = CreateRef<SceneHierarchyPanel>(m_ActiveScene);
 
 		m_SquareEntity = m_ActiveScene->CreateEntity("Orange Square");
 		m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4( 8.0f, 0.5f, 0.2f, 1.0f ));
@@ -38,6 +39,8 @@ namespace Engine
 		m_SecondCamera = m_ActiveScene->CreateEntity("Second Camera");
 		auto& cc = m_SecondCamera.AddComponent<CameraComponent>();
 		cc.Primary = false;
+
+		m_Panel->SetContext(m_ActiveScene);
 
 		class CameraController : public ScriptableEntity
 		{
@@ -148,6 +151,8 @@ namespace Engine
 			}
 			ImGui::EndMenuBar();
 		}
+
+		m_Panel->OnImGuiRender();
 
 		ImGui::Begin("Settings");
 		auto stats = Renderer2D::GetStats();

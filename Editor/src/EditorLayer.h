@@ -2,6 +2,7 @@
 #include "Engine.h"
 #include <vector>
 #include <glm/glm.hpp>
+#include "Panels/SceneHierarchyPanel.h"
 
 namespace Engine
 {
@@ -16,13 +17,13 @@ namespace Engine
 		virtual void OnImGuiRender() override;
 		virtual void OnEvent(Event& event) override;
 	private:
+		Ref<SceneHierarchyPanel> m_Panel;
 
 		Ref<Framebuffer> m_Framebuffer;
 
 		Ref<Scene> m_ActiveScene;
 
 		Entity m_SquareEntity;
-
 		Entity m_CameraEntity;
 		Entity m_SecondCamera;
 

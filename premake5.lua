@@ -1,6 +1,6 @@
 workspace "GameEngineInTwoYears"
 
-architecture "x64"
+outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 configurations
 {
@@ -8,7 +8,11 @@ configurations
 	"Release"
 }
 
-outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+architecture "x64"
+
+include "GameEngineInTwoYears/vendor/ImGui"
+include "GameEngineInTwoYears/vendor/GLFW"
+include "GameEngineInTwoYears/vendor/Glad"
 
 IncludeDir = {}
 IncludeDir["GLFW"] = "GameEngineInTwoYears/vendor/GLFW/include"
@@ -18,9 +22,6 @@ IncludeDir["glm"] = "GameEngineInTwoYears/vendor/glm/"
 IncludeDir["stb_image"] = "GameEngineInTwoYears/vendor/stb_image/"
 IncludeDir["entt"] = "GameEngineInTwoYears/vendor/entt/include/"
 
-include "GameEngineInTwoYears/vendor/GLFW"
-include "GameEngineInTwoYears/vendor/Glad"
-include "GameEngineInTwoYears/vendor/ImGui"
 
 project "GameEngineInTwoYears"
 
@@ -44,6 +45,7 @@ project "GameEngineInTwoYears"
 			"%{prj.name}/vendor/glm/glm/**.inl",
 			"%{prj.name}/vendor/stb_image/**.cpp",
 			"%{prj.name}/vendor/stb_image/**.h",
+			"Editor/src/**.h"
 		}
 	
 		includedirs
