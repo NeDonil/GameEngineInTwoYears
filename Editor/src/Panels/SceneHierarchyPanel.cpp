@@ -154,6 +154,8 @@ namespace Engine
 					float orthoFar = camera.GetOrthographicFar();
 					if (ImGui::DragFloat("Far", &orthoFar));
 						camera.SetOrthographicFar(orthoFar);
+
+					ImGui::Checkbox("Fixed Aspect Ratio", &cameraComponent.FixedAspectRatio);
 				}
 
 				ImGui::TreePop();
