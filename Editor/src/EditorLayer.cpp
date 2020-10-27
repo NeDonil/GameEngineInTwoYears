@@ -18,8 +18,6 @@ namespace Engine
 	{
 		RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
 
-		m_CheckerboardTexture = Texture2D::Create("assets/textures/clown.png");
-
 		FramebufferSpecification fbSpec;
 
 		fbSpec.Width = 1280;
@@ -30,8 +28,11 @@ namespace Engine
 		m_ActiveScene = CreateRef<Scene>();
 		m_Panel = CreateRef<SceneHierarchyPanel>(m_ActiveScene);
 
-		m_SquareEntity = m_ActiveScene->CreateEntity("Orange Square");
-		m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4( 8.0f, 0.5f, 0.2f, 1.0f ));
+		m_OrangeSquareEntity = m_ActiveScene->CreateEntity("Orange Square");
+		m_OrangeSquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4( 8.0f, 0.5f, 0.2f, 1.0f ));
+
+		m_BlueSquareEntity = m_ActiveScene->CreateEntity("Blue Square");
+		m_BlueSquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4(0.2f, 0.5f, 0.8f, 1.0f));
 
 		m_CameraEntity = m_ActiveScene->CreateEntity("Camera Entity");
 		m_CameraEntity.AddComponent<CameraComponent>();
@@ -163,14 +164,14 @@ namespace Engine
 		ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 
-		if (m_SquareEntity)
+		if (m_OrangeSquareEntity)
 		{
 				ImGui::Separator();
 
-				std::string& tag = m_SquareEntity.GetComponent<TagComponent>().Tag;
+				std::string& tag = m_OrangeSquareEntity.GetComponent<TagComponent>().Tag;
 				ImGui::Text("%s", tag.c_str());
 
-				glm::vec4& squareColor = m_SquareEntity.GetComponent<SpriteRendererComponent>().Color;
+				glm::vec4& squareColor = m_OrangeSquareEntity.GetComponent<SpriteRendererComponent>().Color;
 				ImGui::ColorEdit4("Color", glm::value_ptr(squareColor));
 
 				ImGui::Separator();

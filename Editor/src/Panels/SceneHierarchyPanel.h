@@ -8,6 +8,9 @@
 
 #include <imgui.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 namespace Engine
 {
 
@@ -19,11 +22,11 @@ namespace Engine
 		SceneHierarchyPanel(const Ref<Scene>& context);
 
 		void SetContext(const Ref<Scene>& context);
-
 		void OnImGuiRender();
 
+	private:
 		void DrawEntityNode(Entity entity);
-
+		void DrawComponents(Entity entity);
 	private:
 		Ref<Scene> m_Context;
 		Entity m_SelectionEntity;
