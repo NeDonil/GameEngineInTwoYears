@@ -164,28 +164,6 @@ namespace Engine
 		ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 
-		if (m_OrangeSquareEntity)
-		{
-				ImGui::Separator();
-
-				std::string& tag = m_OrangeSquareEntity.GetComponent<TagComponent>().Tag;
-				ImGui::Text("%s", tag.c_str());
-
-				glm::vec4& squareColor = m_OrangeSquareEntity.GetComponent<SpriteRendererComponent>().Color;
-				ImGui::ColorEdit4("Color", glm::value_ptr(squareColor));
-
-				ImGui::Separator();
-		}
-
-		ImGui::DragFloat3("Camera Transform",
-			glm::value_ptr(m_CameraEntity.GetComponent<TransformComponent>().Transform[3]),
-			0.1f, -1.0f, 1.0f);
-
-		if (ImGui::Checkbox("Camera A", &m_PrimaryCamera))
-		{
-			m_CameraEntity.GetComponent<CameraComponent>().Primary = m_PrimaryCamera;
-			m_SecondCamera.GetComponent<CameraComponent>().Primary = !m_PrimaryCamera;
-		}
 
 		ImGui::End();
 
