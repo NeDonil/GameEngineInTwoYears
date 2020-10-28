@@ -34,6 +34,12 @@ namespace Engine
 		m_BlueSquareEntity = m_ActiveScene->CreateEntity("Blue Square");
 		m_BlueSquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4(0.2f, 0.5f, 0.8f, 1.0f));
 
+		m_GreenSquareEntity = m_ActiveScene->CreateEntity("Green Square");
+		m_GreenSquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4(0.2f, 0.8f, 0.2f, 1.0f));
+
+		m_RedSquareEntity = m_ActiveScene->CreateEntity("Red Square");
+		m_RedSquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4(0.8f, 0.2f, 0.2f, 1.0f));
+
 		m_CameraEntity = m_ActiveScene->CreateEntity("Camera Entity");
 		m_CameraEntity.AddComponent<CameraComponent>();
 

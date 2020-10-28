@@ -25,6 +25,9 @@ namespace Engine
 
 		Entity m_OrangeSquareEntity;
 		Entity m_BlueSquareEntity;
+		Entity m_GreenSquareEntity;
+		Entity m_RedSquareEntity;
+
 		Entity m_CameraEntity;
 		Entity m_SecondCamera;
 
