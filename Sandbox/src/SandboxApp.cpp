@@ -5,26 +5,27 @@
 #include "Engine/ImGui/ImGuiLayer.h"
 #include "Sandbox2D.h"
 
-class Sandbox : public Engine::Application
+class SandboxApplication : public Engine::Application
 {
 public:
-	Sandbox()
+	SandboxApplication()
 		: Application("Sandbox")
 	{
 
-		
-		PushLayer(new Sandbox2D());
+
+		PushLayer(new Sandbox::Sandbox2D());
 	}
 
-	~Sandbox()
+	~SandboxApplication()
 	{
 
-		
+
 	}
 };
+
 Engine::Application* Engine::CreateApplication()
 {
 
-	
-	return new Sandbox();
+
+	return new SandboxApplication();
 }
