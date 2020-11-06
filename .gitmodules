@@ -10,3 +10,6 @@
 [submodule "GameEngineInTwoYears/vendor/glm"]
 	path = GameEngineInTwoYears/vendor/glm
 	url = https://github.com/g-truc/glm
+[submodule "GameEngineInTwoYears/vendor/box2d"]
+	path = GameEngineInTwoYears/vendor/box2d
+	url = https://github.com/TheCherno/box2d

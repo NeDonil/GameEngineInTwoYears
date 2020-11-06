@@ -13,6 +13,7 @@ architecture "x64"
 include "GameEngineInTwoYears/vendor/ImGui"
 include "GameEngineInTwoYears/vendor/GLFW"
 include "GameEngineInTwoYears/vendor/Glad"
+include "GameEngineInTwoYears/vendor/box2d"
 
 IncludeDir = {}
 IncludeDir["GLFW"] = "GameEngineInTwoYears/vendor/GLFW/include"
@@ -21,6 +22,7 @@ IncludeDir["ImGui"] = "GameEngineInTwoYears/vendor/ImGui/"
 IncludeDir["glm"] = "GameEngineInTwoYears/vendor/glm/"
 IncludeDir["stb_image"] = "GameEngineInTwoYears/vendor/stb_image/"
 IncludeDir["entt"] = "GameEngineInTwoYears/vendor/entt/include/"
+IncludeDir["box2d"] = "GameEngineInTwoYears/vendor/box2d/include/"
 
 
 project "GameEngineInTwoYears"
@@ -66,6 +68,7 @@ project "GameEngineInTwoYears"
 			"GLFW",
 			"Glad",
 			"ImGui",
+			"box2d",
 			"opengl32.lib"
 		}
 	
@@ -112,6 +115,7 @@ project "Sandbox"
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.entt}",
+		"%{IncludeDir.box2d}",
 		"GameEngineInTwoYears/src"
 	}
 

@@ -1,6 +1,7 @@
 #include <chrono>
 #include "Sandbox2D.h"
 #include "Engine/Core/EntryPoint.h"
+#include <box2d/box2d.h>
 
 Sandbox2D::Sandbox2D():
 	Layer("Layer2D"), m_CameraController((float)1280 / 720, true)
@@ -10,7 +11,8 @@ Sandbox2D::Sandbox2D():
 void Sandbox2D::OnAttach()
 {
 	
-	m_CheckerboardTexture = Engine::Texture2D::Create("assets/textures/clown.png");
+	m_Texture = Engine::Texture2D::Create("assets/textures/clown.png");
+	b2World* world;
 
 }
 
@@ -39,8 +41,10 @@ void Sandbox2D::OnUpdate(Engine::Timestep ts)
 		Engine::Renderer2D::DrawQuad({ 0.0f, 0.0f }, { 1.0f, 1.0f }, {0.2f, 0.5f, 0.8f, 1.0f});
 		Engine::Renderer2D::DrawQuad({ 0.0f, -2.0f }, { 1.0f, 1.0f }, { 0.5f, 0.2f, 0.8f, 1.0f });
 
-		Engine::Renderer2D::DrawQuad({ 2.0f, 0.0f }, { 1.0f, 1.0f }, m_CheckerboardTexture);
-		Engine::Renderer2D::DrawQuad({ 2.0f, -2.0f }, { 1.0f, 1.0f }, m_CheckerboardTexture);
+		Engine::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, { 20.0f, 20.0f }, { 0.8f, 0.5f, 0.2f, 1.0f });
+
+		Engine::Renderer2D::DrawQuad({ 2.0f, 0.0f }, { 1.0f, 1.0f }, m_Texture);
+		Engine::Renderer2D::DrawQuad({ 2.0f, -2.0f }, { 1.0f, 1.0f }, m_Texture);
 
 		Engine::Renderer2D::EndScene();
 	}
@@ -48,18 +52,6 @@ void Sandbox2D::OnUpdate(Engine::Timestep ts)
 
 void Sandbox2D::OnImGuiRender()
 {	
-	ImGui::Begin("Settings");
-
-	auto stats = Engine::Renderer2D::GetStats();
-	ImGui::Text("Renderer2D Stats:");
-	ImGui::Text("Draw Calls: %d", stats.DrawCalls);
-	ImGui::Text("Quads: %d", stats.QuadCount);
-	ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
-	ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
-
-	ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
-
-	ImGui::End();
 	
 }
 
