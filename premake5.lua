@@ -14,6 +14,7 @@ include "GameEngineInTwoYears/vendor/ImGui"
 include "GameEngineInTwoYears/vendor/GLFW"
 include "GameEngineInTwoYears/vendor/Glad"
 include "GameEngineInTwoYears/vendor/box2d"
+include "GameEngineInTwoYears/vendor/yaml-cpp"
 
 IncludeDir = {}
 IncludeDir["GLFW"] = "GameEngineInTwoYears/vendor/GLFW/include"
@@ -23,6 +24,7 @@ IncludeDir["glm"] = "GameEngineInTwoYears/vendor/glm/"
 IncludeDir["stb_image"] = "GameEngineInTwoYears/vendor/stb_image/"
 IncludeDir["entt"] = "GameEngineInTwoYears/vendor/entt/include/"
 IncludeDir["box2d"] = "GameEngineInTwoYears/vendor/box2d/include/"
+IncludeDir["yaml_cpp"] = "GameEngineInTwoYears/vendor/yaml-cpp/include/"
 
 
 project "GameEngineInTwoYears"
@@ -59,8 +61,8 @@ project "GameEngineInTwoYears"
 			"%{IncludeDir.Glad}",
 			"%{IncludeDir.ImGui}",
 			"%{IncludeDir.stb_image}",
-			"%{IncludeDir.entt}"
-	
+			"%{IncludeDir.entt}",
+			"%{IncludeDir.yaml_cpp}"
 		}
 	
 		links
@@ -69,6 +71,7 @@ project "GameEngineInTwoYears"
 			"Glad",
 			"ImGui",
 			"box2d",
+			"yaml-cpp",
 			"opengl32.lib"
 		}
 	
@@ -165,10 +168,11 @@ project "Editor"
 	{
 		"GameEngineInTwoYears/vendor/spdlog/include",
 		"GameEngineInTwoYears/vendor/glm",
+		"GameEngineInTwoYears/src",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
-		"GameEngineInTwoYears/src",
-		"%{IncludeDir.entt}"
+		"%{IncludeDir.entt}",
+		"%{IncludeDir.yaml_cpp}"
 	}
 
 	links

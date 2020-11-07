@@ -13,3 +13,6 @@
 [submodule "GameEngineInTwoYears/vendor/box2d"]
 	path = GameEngineInTwoYears/vendor/box2d
 	url = https://github.com/TheCherno/box2d
+[submodule "GameEngineInTwoYears/vendor/yaml-cpp"]
+	path = GameEngineInTwoYears/vendor/yaml-cpp
+	url = https://github.com/TheCherno/yaml-cpp
