@@ -38,6 +38,11 @@ namespace Engine
 		return entity;
 	}
 
+	void Scene::DestroyEntity(Entity& entity)
+	{
+		m_Registry.destroy(entity);
+	}
+
 	void Scene::OnUpdate(Timestep ts)
 	{
 		//Update Scripts
@@ -99,5 +104,41 @@ namespace Engine
 			if(!cameraComponent.FixedAspectRatio)
 				cameraComponent.Camera.SetViewportSize(width, height);
 		}
+	}
+
+	template<typename T>
+	void Scene::OnComponentAdded(Entity& entity, T& component)
+	{
+
+	}
+
+	template<>
+	void Scene::OnComponentAdded(Entity& entity, TagComponent& component)
+	{
+
+	}
+
+	template<>
+	void Scene::OnComponentAdded(Entity& entity, TransformComponent& component)
+	{
+
+	}
+
+	template<>
+	void Scene::OnComponentAdded(Entity& entity, CameraComponent& component)
+	{
+		component.Camera.SetViewportSize(m_ViewportWidth, m_ViewportHeight);
+	}
+
+	template<>
+	void Scene::OnComponentAdded(Entity& entity, SpriteRendererComponent& component)
+	{
+
+	}
+
+	template<>
+	void Scene::OnComponentAdded(Entity& entity, NativeScriptComponent& component)
+	{
+
 	}
 }
