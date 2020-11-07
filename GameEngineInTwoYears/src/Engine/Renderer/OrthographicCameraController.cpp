@@ -49,6 +49,21 @@ namespace Engine
 		m_Camera.SetProjection(m_Bounds.Left, m_Bounds.Right, m_Bounds.Bottom, m_Bounds.Top);
 	}
 
+	void OrthographicCameraController::SetZoomLevel(float zoomLevel)
+	{
+		m_ZoomLevel = zoomLevel;
+
+		m_Bounds = { -m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel };
+		m_Camera.SetProjection(m_Bounds.Left, m_Bounds.Right, m_Bounds.Bottom, m_Bounds.Top);
+	}
+
+	void OrthographicCameraController::SetPosition(const glm::vec3& position)
+	{
+		m_CameraPosition = position;
+
+		m_Camera.SetPosition(m_CameraPosition);
+	}
+
 	bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e)
 	{
 		m_ZoomLevel -= e.GetYOffset() * 0.25;

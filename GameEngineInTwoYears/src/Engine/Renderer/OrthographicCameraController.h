@@ -24,14 +24,16 @@ namespace Engine
 
 		void OnUpdate(Timestep ts);
 		bool OnEvent(Event& e);
-
 		void OnResize(float width, float height);
 
 		OrthographicCamera& GetCamera() { return m_Camera; }
 		const OrthographicCamera& GetCamera() const { return m_Camera; }
 
-		void SetZoomLevel(float level) { m_ZoomLevel = level; }
+		void SetZoomLevel(float level);
 		const float GetZoomLevel() const { return m_ZoomLevel; }
+
+		void SetPosition(const glm::vec3& position);
+		const glm::vec3& GetPosition() { return m_CameraPosition; }
 
 		const OrthographicCameraBounds& GetBounds() const { return m_Bounds; }
 	private:
