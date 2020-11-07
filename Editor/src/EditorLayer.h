@@ -4,6 +4,8 @@
 #include <glm/glm.hpp>
 #include "Panels/SceneHierarchyPanel.h"
 
+#include "Engine/Scene/SceneSerializer.h"
+
 namespace Engine
 {
 	class EditorLayer : public Layer
@@ -18,22 +20,13 @@ namespace Engine
 		virtual void OnEvent(Event& event) override;
 	private:
 		Ref<SceneHierarchyPanel> m_Panel;
-
 		Ref<Framebuffer> m_Framebuffer;
 
 		Ref<Scene> m_ActiveScene;
-
-		Entity m_OrangeSquareEntity;
-		Entity m_BlueSquareEntity;
-		Entity m_GreenSquareEntity;
-		Entity m_RedSquareEntity;
-
-		Entity m_CameraEntity;
-		Entity m_SecondCamera;
+		Ref<SceneSerializer> m_Serializer;
 
 		bool m_ViewportFocused = false, m_ViewportHovered = false;
 		glm::vec2 m_ViewportSize;
-		glm::vec4 m_SquareColor = { 0.8f, 0.3f, 0.2f, 1.0f };
 
 		struct ProfileResult {
 			const char* Name;

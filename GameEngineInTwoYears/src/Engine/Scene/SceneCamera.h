@@ -5,6 +5,8 @@ namespace Engine
 	class SceneCamera : public Camera
 	{
 	public:
+		friend class SceneSerializer;
+
 		enum ProjectionType { Perspective = 0, Orthographic = 1 };
 	public:
 		SceneCamera();
@@ -37,7 +39,6 @@ namespace Engine
 
 		float GetOrthographicFar() const { return m_OrthographicFar; }
 		void SetOrthographicFar(float farClip) { m_OrthographicFar = farClip; RecalculateProjection(); }
-
 	private:
 		void RecalculateProjection();
 	private:

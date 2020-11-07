@@ -27,28 +27,9 @@ namespace Engine
 
 		m_ActiveScene = CreateRef<Scene>();
 		m_Panel = CreateRef<SceneHierarchyPanel>(m_ActiveScene);
-
-		m_OrangeSquareEntity = m_ActiveScene->CreateEntity("Orange Square");
-		m_OrangeSquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4( 8.0f, 0.5f, 0.2f, 1.0f ));
-
-		m_BlueSquareEntity = m_ActiveScene->CreateEntity("Blue Square");
-		m_BlueSquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4(0.2f, 0.5f, 0.8f, 1.0f));
-
-		m_GreenSquareEntity = m_ActiveScene->CreateEntity("Green Square");
-		m_GreenSquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4(0.2f, 0.8f, 0.2f, 1.0f));
-
-		m_RedSquareEntity = m_ActiveScene->CreateEntity("Red Square");
-		m_RedSquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4(0.8f, 0.2f, 0.2f, 1.0f));
-
-		m_CameraEntity = m_ActiveScene->CreateEntity("Camera Entity");
-		m_CameraEntity.AddComponent<CameraComponent>();
-
-		m_SecondCamera = m_ActiveScene->CreateEntity("Second Camera");
-		auto& cc = m_SecondCamera.AddComponent<CameraComponent>();
-		cc.Primary = false;
-
-		m_Panel->SetContext(m_ActiveScene);
-
+		
+#ifdef NativeScriptExample 
+		// rest in peace
 		class CameraController : public ScriptableEntity
 		{
 		public:
@@ -77,9 +58,9 @@ namespace Engine
 					translation.y -= speed * ts;
 			}
 		};
+#endif
 
-		m_SecondCamera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
-
+		m_Serializer = CreateRef<SceneSerializer>(m_ActiveScene);
 	}
 
 	void EditorLayer::OnDetach()
@@ -154,6 +135,9 @@ namespace Engine
 			if (ImGui::BeginMenu("File"))
 			{
 				if (ImGui::MenuItem("Exit")) Application::Get().Close();
+				if (ImGui::MenuItem("Serialize")) m_Serializer->Serialize("assets/scenes/scene1.scene");
+				if (ImGui::MenuItem("Deserialize")) m_Serializer->Deserialize("assets/scenes/scene1.scene");
+
 				ImGui::EndMenu();
 			}
 			ImGui::EndMenuBar();
