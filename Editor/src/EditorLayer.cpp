@@ -227,7 +227,7 @@ namespace Engine
 		if (!filepath.empty())
 		{
 			SceneSerializer serializer(m_ActiveScene);
-			serializer.Serialize("assets/scenes/scene1.scene");
+			serializer.Serialize(filepath);
 		}
 	}
 

@@ -8,6 +8,13 @@ namespace Engine
 	void OpenGLRendererAPI::Init()
 	{
 		glEnable(GL_BLEND);
+		glEnable(GL_MULTISAMPLE);
+
+		int samples = 0;
+		glGetIntegerv(GL_SAMPLES, &samples);
+		if (samples)
+			ENGINE_CORE_INFO("Context reports MSAA is available with {0} samples\n", samples);
+
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		glEnable(GL_DEPTH_TEST);

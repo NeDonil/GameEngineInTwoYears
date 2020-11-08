@@ -20,37 +20,28 @@ Entities:
       FixedAspectRatio: false
   - Entity: 3134134123465
     TagComponent:
-      Tag: 1
+      Tag: white
     TransformComponent:
-      Translation: [-1, -1, -1]
+      Translation: [0, 1, 0]
       Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
+      Scale: [5, 1, 1]
     SpriteRendererComponent:
-      Color: [0, 0.0442478657, 1, 1]
+      Color: [1, 1, 1, 1]
   - Entity: 3134134123465
     TagComponent:
-      Tag: 2
+      Tag: blue
     TransformComponent:
-      Translation: [-1, 1, 1]
+      Translation: [0, 0, 0]
       Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
+      Scale: [5, 1, 1]
     SpriteRendererComponent:
-      Color: [0, 1, 0.0707962513, 1]
+      Color: [0, 0.148822784, 1, 1]
   - Entity: 3134134123465
     TagComponent:
-      Tag: 3
+      Tag: red
     TransformComponent:
-      Translation: [1, 1, 1]
+      Translation: [0, -1, 0]
       Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
+      Scale: [5, 1, 1]
     SpriteRendererComponent:
       Color: [1, 0, 0, 1]
-  - Entity: 3134134123465
-    TagComponent:
-      Tag: 4
-    TransformComponent:
-      Translation: [1, -1, -1]
-      Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
-    SpriteRendererComponent:
-      Color: [0.831858397, 0.510007918, 0, 1]
