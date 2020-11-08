@@ -2,6 +2,7 @@
 #include "EditorLayer.h"
 #include "Engine/Core/EntryPoint.h"
 #include "Engine/Core/Application.h"
+#include "Engine/Core/Core.h"
 
 #include "entt.hpp"
 
@@ -26,8 +27,8 @@ namespace Engine
 		m_Framebuffer = Framebuffer::Create(fbSpec);
 
 		m_ActiveScene = CreateRef<Scene>();
-		m_Panel = CreateRef<SceneHierarchyPanel>(m_ActiveScene);
-		
+		m_HierarchyPanel = CreateRef<SceneHierarchyPanel>(m_ActiveScene);
+
 #ifdef NativeScriptExample 
 		// rest in peace
 		class CameraController : public ScriptableEntity
@@ -60,7 +61,6 @@ namespace Engine
 		};
 #endif
 
-		m_Serializer = CreateRef<SceneSerializer>(m_ActiveScene);
 	}
 
 	void EditorLayer::OnDetach()
@@ -70,19 +70,19 @@ namespace Engine
 	void EditorLayer::OnUpdate(Timestep ts)
 	{
 		ENGINE_PROFILE_SCOPE("EditorLayer::OnUpdate");
-		
+
 		if (FramebufferSpecification spec = m_Framebuffer->GetSpecification();
 			m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f &&
 			(spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y))
 		{
 			m_Framebuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-			
+
 			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		}
 
 		Renderer2D::ResetStats();
 		m_Framebuffer->Bind();
-		
+
 		RenderCommand::Clear();
 
 		m_ActiveScene->OnUpdate(ts);
@@ -134,16 +134,24 @@ namespace Engine
 		{
 			if (ImGui::BeginMenu("File"))
 			{
-				if (ImGui::MenuItem("Exit")) Application::Get().Close();
-				if (ImGui::MenuItem("Serialize")) m_Serializer->Serialize("assets/scenes/scene1.scene");
-				if (ImGui::MenuItem("Deserialize")) m_Serializer->Deserialize("assets/scenes/scene1.scene");
+				if (ImGui::MenuItem("New", "Ctrl+N"))
+					NewScene();
+
+				if (ImGui::MenuItem("Open...", "Ctrl+O"))
+					OpenScene();
+
+				if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
+					SaveSceneAs();
+
+				if (ImGui::MenuItem("Exit")) 
+					Application::Get().Close();
 
 				ImGui::EndMenu();
 			}
 			ImGui::EndMenuBar();
 		}
 
-		m_Panel->OnImGuiRender();
+		m_HierarchyPanel->OnImGuiRender();
 
 		ImGui::Begin("Settings");
 		auto stats = Renderer2D::GetStats();
@@ -177,6 +185,71 @@ namespace Engine
 
 	void EditorLayer::OnEvent(Event& e)
 	{
-		
+		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<KeyPressedEvent>(ENGINE_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
 	}
+
+	bool EditorLayer::OnKeyPressed(KeyPressedEvent& e)
+	{
+		bool control = Input::IsKeyPressed(ENGINE_KEY_LEFT_CONTROL) || Input::IsKeyPressed(ENGINE_KEY_RIGHT_CONTROL);
+		bool shift = Input::IsKeyPressed(ENGINE_KEY_LEFT_SHIFT) || Input::IsKeyPressed(ENGINE_KEY_RIGHT_SHIFT);
+
+		if (e.GetRepeatCount() > 0)
+			return false;
+
+		switch (e.GetKeyCode())
+		{
+
+			case ENGINE_KEY_S:
+			{
+				if (control && shift)
+					SaveSceneAs();
+			} break;
+
+			case ENGINE_KEY_N:
+			{
+				if (control)
+					NewScene();
+			} break;
+
+			case ENGINE_KEY_O:
+			{
+				if (control)
+					OpenScene();
+			} break;
+
+		}
+	}
+
+	void EditorLayer::SaveSceneAs()
+	{
+		std::string filepath = FileDialog::SaveFile("Engine Scene (*.scene)\0*.scene\0");
+		if (!filepath.empty())
+		{
+			SceneSerializer serializer(m_ActiveScene);
+			serializer.Serialize("assets/scenes/scene1.scene");
+		}
+	}
+
+	void EditorLayer::NewScene()
+	{
+		m_ActiveScene = CreateRef<Scene>();
+		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+		m_HierarchyPanel->SetContext(m_ActiveScene);
+	}
+
+	void EditorLayer::OpenScene()
+	{
+		std::string filepath = FileDialog::OpenFile("Engine Scene (*.scene)\0*.scene\0");
+		if (!filepath.empty())
+		{
+			m_ActiveScene = CreateRef<Scene>();
+			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+			m_HierarchyPanel->SetContext(m_ActiveScene);
+
+			SceneSerializer serializer(m_ActiveScene);
+			serializer.Deserialize(filepath);
+		}
+	}
+
 }

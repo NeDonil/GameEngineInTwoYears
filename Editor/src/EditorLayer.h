@@ -6,6 +6,8 @@
 
 #include "Engine/Scene/SceneSerializer.h"
 
+#include "Engine/Utils/PlatformUtils.h"
+
 namespace Engine
 {
 	class EditorLayer : public Layer
@@ -19,11 +21,16 @@ namespace Engine
 		virtual void OnImGuiRender() override;
 		virtual void OnEvent(Event& event) override;
 	private:
-		Ref<SceneHierarchyPanel> m_Panel;
+		bool OnKeyPressed(KeyPressedEvent& e);
+
+		void SaveSceneAs();
+		void NewScene();
+		void OpenScene();
+	private:
+		Ref<SceneHierarchyPanel> m_HierarchyPanel;
 		Ref<Framebuffer> m_Framebuffer;
 
 		Ref<Scene> m_ActiveScene;
-		Ref<SceneSerializer> m_Serializer;
 
 		bool m_ViewportFocused = false, m_ViewportHovered = false;
 		glm::vec2 m_ViewportSize;
