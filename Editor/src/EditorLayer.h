@@ -8,6 +8,8 @@
 
 #include "Engine/Utils/PlatformUtils.h"
 
+#include "ImGuizmo.h"
+
 namespace Engine
 {
 	class EditorLayer : public Layer
