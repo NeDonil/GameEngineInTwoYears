@@ -29,13 +29,15 @@ namespace Engine
 		void NewScene();
 		void OpenScene();
 	private:
-		Ref<SceneHierarchyPanel> m_HierarchyPanel;
+		Ref<SceneHierarchyPanel> m_SceneHierarchyPanel;
 		Ref<Framebuffer> m_Framebuffer;
 
 		Ref<Scene> m_ActiveScene;
 
 		bool m_ViewportFocused = false, m_ViewportHovered = false;
 		glm::vec2 m_ViewportSize;
+
+		int m_GizmoType = -1;
 
 		struct ProfileResult {
 			const char* Name;
