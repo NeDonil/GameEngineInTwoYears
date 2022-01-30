@@ -1,5 +1,6 @@
 #pragma once
 #include "Engine.h"
+#include "Engine/Renderer/EditorCamera.h"
 #include <vector>
 #include <glm/glm.hpp>
 #include "Panels/SceneHierarchyPanel.h"
@@ -34,8 +35,10 @@ namespace Engine
 
 		Ref<Scene> m_ActiveScene;
 
+		EditorCamera m_EditorCamera;
+
 		bool m_ViewportFocused = false, m_ViewportHovered = false;
-		glm::vec2 m_ViewportSize;
+		glm::vec2 m_ViewportSize = {0.0f, 0.0f};
 
 		int m_GizmoType = -1;
 

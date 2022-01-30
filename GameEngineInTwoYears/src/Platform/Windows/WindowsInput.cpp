@@ -17,7 +17,7 @@ namespace Engine
 	{
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		auto state = glfwGetMouseButton(window, button);
-		return button == GLFW_PRESS;
+		return state == GLFW_PRESS;
 	}
 
 	std::pair<float, float> Input::GetMousePosition()

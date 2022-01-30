@@ -43,6 +43,9 @@ namespace Engine
 			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 		}
 
+		//io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/RobotoSlab/RobotoSlab-Regular.ttf", 16.0f);
+		io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/OpenSans/OpenSans-Regular.ttf", 18.0f);
+
 		Application& app = Application::Get();
 		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
 

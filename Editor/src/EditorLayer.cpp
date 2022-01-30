@@ -30,6 +30,8 @@ namespace Engine
 		m_ActiveScene = CreateRef<Scene>();
 		m_SceneHierarchyPanel = CreateRef<SceneHierarchyPanel>(m_ActiveScene);
 
+		m_EditorCamera = EditorCamera(30.0f, 16.0f / 9.0f, 0.1, 1000.0f);
+
 #ifdef NativeScriptExample 
 		// rest in peace
 		class CameraController : public ScriptableEntity
@@ -72,22 +74,29 @@ namespace Engine
 	{
 		ENGINE_PROFILE_SCOPE("EditorLayer::OnUpdate");
 
+		//Resize
 		if (FramebufferSpecification spec = m_Framebuffer->GetSpecification();
 			m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f &&
 			(spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y))
 		{
 			m_Framebuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-
+			m_EditorCamera.SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
 			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		}
 
+		if (m_ViewportFocused)
+		{
+			
+		}
+		m_EditorCamera.OnUpdate(ts);
+
+		//Render
 		Renderer2D::ResetStats();
 		m_Framebuffer->Bind();
-
 		RenderCommand::Clear();
 
-		m_ActiveScene->OnUpdate(ts);
-
+		//Update scene
+		m_ActiveScene->OnUpdateEditor(ts, m_EditorCamera);
 		m_Framebuffer->Unbind();
 
 		frameTime = (float)ts;
@@ -190,16 +199,25 @@ namespace Engine
 			float windowHeight = (float)ImGui::GetWindowHeight();
 			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
 
-			auto cameraEntity = m_ActiveScene->GetPrimaryCameraEntity();
-			const auto& camera = cameraEntity.GetComponent<CameraComponent>().Camera;
-			const glm::mat4& cameraProjection = camera.GetProjection();
-			glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+			//Camera
+
+			//Runtime camera from entity
+			//auto cameraEntity = m_ActiveScene->GetPrimaryCameraEntity();
+			//const auto& camera = cameraEntity.GetComponent<CameraComponent>().Camera;
+			//const glm::mat4& cameraProjection = camera.GetProjection();
+			//glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+
+			//Editor camera
+
+			const glm::mat4& cameraProjection = m_EditorCamera.GetProjection();
+			glm::mat4 cameraView = m_EditorCamera.GetViewMatrix();
 
 			//Entity transform 
 			auto& tc = selectedEntity.GetComponent<TransformComponent>();
 			glm::mat4 transform = tc.GetTransform();
 
-			bool snap = Input::IsKeyPressed(ENGINE_KEY_LEFT_CONTROL);
+			//Snapping
+			bool snap = Input::IsKeyPressed(Engine::Key::LeftControl);
 			float snapValue = 0.5f;
 			if (m_GizmoType == ImGuizmo::OPERATION::ROTATE)
 				snapValue = 45.0f;
@@ -233,14 +251,16 @@ namespace Engine
 
 	void EditorLayer::OnEvent(Event& e)
 	{
+		m_EditorCamera.OnEvent(e);
+
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<KeyPressedEvent>(ENGINE_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
 	}
 
 	bool EditorLayer::OnKeyPressed(KeyPressedEvent& e)
 	{
-		bool control = Input::IsKeyPressed(ENGINE_KEY_LEFT_CONTROL) || Input::IsKeyPressed(ENGINE_KEY_RIGHT_CONTROL);
-		bool shift = Input::IsKeyPressed(ENGINE_KEY_LEFT_SHIFT) || Input::IsKeyPressed(ENGINE_KEY_RIGHT_SHIFT);
+		bool control = Input::IsKeyPressed(Engine::Key::LeftControl) || Input::IsKeyPressed(Engine::Key::RightControl);
+		bool shift = Input::IsKeyPressed(Engine::Key::LeftShift) || Input::IsKeyPressed(Engine::Key::RightShift);
 
 		if (e.GetRepeatCount() > 0)
 			return false;
@@ -248,19 +268,19 @@ namespace Engine
 		switch (e.GetKeyCode())
 		{
 
-			case ENGINE_KEY_S:
+		case Engine::Key::S:
 			{
 				if (control && shift)
 					SaveSceneAs();
 			} break;
 
-			case ENGINE_KEY_N:
+			case Engine::Key::N:
 			{
 				if (control)
 					NewScene();
 			} break;
 
-			case ENGINE_KEY_O:
+			case Engine::Key::O:
 			{
 				if (control)
 					OpenScene();
@@ -268,22 +288,22 @@ namespace Engine
 
 			//Gizmos 
 
-			case ENGINE_KEY_Q:
+			case Engine::Key::Q:
 			{
 				m_GizmoType = -1;
 			} break;
 
-			case ENGINE_KEY_W:
+			case Engine::Key::W:
 			{
 				m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
 			} break;
 
-			case ENGINE_KEY_E:
+			case Engine::Key::E:
 			{
 				m_GizmoType = ImGuizmo::OPERATION::ROTATE;
 			} break;
 
-			case ENGINE_KEY_R:
+			case Engine::Key::R:
 			{
 				m_GizmoType = ImGuizmo::OPERATION::SCALE;
 			} break;

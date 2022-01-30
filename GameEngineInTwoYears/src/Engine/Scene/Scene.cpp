@@ -43,21 +43,33 @@ namespace Engine
 		m_Registry.destroy(entity);
 	}
 
-	void Scene::OnUpdate(Timestep ts)
+	void Scene::OnUpdateEditor(Timestep ts, EditorCamera& camera)
+	{
+		Renderer2D::BeginScene(camera);
+		auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+		for (auto entity : group)
+		{
+			auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+			Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color);
+		}
+		Renderer2D::EndScene();
+	}
+
+	void Scene::OnUpdateRuntime(Timestep ts)
 	{
 		//Update Scripts
 		{
 			m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
+			{
+				if (!nsc.Instance)
 				{
-					if (!nsc.Instance)
-					{
-						nsc.InstantiateFunction();
-						nsc.Instance->m_Entity = Entity{ entity, this };
-						nsc.OnCreateFunction(nsc.Instance);
-					}
+					nsc.InstantiateFunction();
+					nsc.Instance->m_Entity = Entity{ entity, this };
+					nsc.OnCreateFunction(nsc.Instance);
+				}
 
-					nsc.OnUpdateFunction(nsc.Instance, ts);
-				});
+				nsc.OnUpdateFunction(nsc.Instance, ts);
+			});
 		}
 
 		//Render 2D

@@ -7,7 +7,7 @@
 #include "Engine/Core/Input.h"
 
 #include "Engine/Core/KeyCodes.h"
-#include "Engine/Core/MouseButtonKeyCodes.h"
+#include "Engine/Core/MouseCodes.h"
 #include "Engine/Core/Random.h"
 
 #include "Engine/Core/Timestep.h"
